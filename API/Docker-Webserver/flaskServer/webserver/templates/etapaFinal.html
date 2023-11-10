@@ -1,0 +1,36 @@
+{% block content %}
+
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/style.css' />
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/opciones.css' />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&display=swap" rel="stylesheet" />
+
+<div id="div-etapa-5" class="etapa">
+    <div style="max-width:1024px;text-align:center; margin: 0 auto;">
+
+        <div id="div-titulo-5" class="titulo">
+            <h1>
+                ¡ Presupuesto creado !
+            </h1>
+        </div>
+        <div id="div-subtitulo-5" class="subtitulo">
+            <h3>
+                Gracias por tenernos en cuenta para tu proyecto
+            </h3>
+        </div>
+        <div id="div-subtitulo-5" class="subtitulo">
+            <h2 class="precioTotal">
+                {{resultado}}€
+            </h2>
+        </div><br>
+        <br>
+        <a href="{{url}}" class = "link external">
+            <button type="button" class="slide">
+                <div>Finalizar</div>
+                <i class="icon-arrow-right"></i>
+            </button>
+        </a>
+    </div>
+</div>
+{% endblock %}

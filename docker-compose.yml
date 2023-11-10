@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  web:
+    image: lobsterk/web-nginx-php
+    container_name: web
+    restart: always
+    ports:
+      - "8172:80"
+    volumes:
+      - ./Web/www:/var/www/public
+      - ./Web/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./Web/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./Web/php-fpm/php.ini:/etc/php/7.4/fpm/php.ini
+      - ./Web/php-fpm/php-fpm.conf:/etc/php/7.4/fpm/php-fpm.conf
+    networks:
+      - custom_network
+
+  webserver:
+    build:
+      context: ./API/Docker-Webserver/flaskServer
+    ports:
+      - "5000:5000"
+    links:
+      - mariadb
+    restart: 'always'
+    volumes:
+      - ./API/Docker-Webserver/flaskServer/webserver:/flaskProject
+    networks:
+      - custom_network
+
+  mariadb:
+    image: mariadb:10.6-focal
+    restart: 'always'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: minervatech
+      MYSQL_USER: minervatech
+      MYSQL_PASSWORD: MinervallTech
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/1.sql"
+    networks:
+      - custom_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'Phpmyadmin'
+    links:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    ports:
+      - '800:80'
+    networks:
+      - custom_network
+
+networks:
+  custom_network:

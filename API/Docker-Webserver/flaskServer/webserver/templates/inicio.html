@@ -1,0 +1,30 @@
+{% block content %}
+
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/style.css' />
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/opciones.css' />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&display=swap" rel="stylesheet" />
+
+<div id="div-etapa-5" class="etapa">
+    <div style="max-width:1024px;text-align:center; margin: 0 auto;">
+
+        <div id="div-titulo-5" class="titulo">
+            <h1>
+                ¡ Ingresa tus datos para recibir un presupuesto personalizado!
+            </h1>
+        </div>
+        <br>
+        <div id="div-opciones-5" style="max-width:90vw !important; margin:0 auto;" class="opciones">
+            <input type="text" name="n_presupuesto" id="n_presupuesto" placeholder="Nombre" required=""><br>
+            <input type="email" name="tipo_ant" id="tipo_ant" placeholder="Email" required=""><br>
+            <input type="text" name="valor_ant" id="valor_ant" placeholder="Teléfono" required=""><br>
+        </div>
+        <br>
+        <button type="button" class="slide" id="button-siguiente" onclick='{{funcion_sig}}({{posicion}}+1)'>
+            <div>Siguiente etapa</div>
+            <i class="icon-arrow-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

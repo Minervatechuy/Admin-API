@@ -1,0 +1,45 @@
+{% block content %}
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/style.css' />
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/opciones.css' />
+<link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&display=swap" rel="stylesheet" />
+
+<script>
+    console.log("Funciona");
+    alert("JavaScript se ejecuta");
+</script>
+
+<div style="max-width:1024px;text-align:center; margin: 0 auto;">
+    <div id="div-titulo-1" class="titulo">
+        <h1>{{titulo}}</h1>
+    </div>
+    <div id="div-subtitulo-1" class="subtitulo">
+        <h3>{{subtitulo}}</h3>
+    </div>
+    <div id="div-opciones" class="opciones">
+        {% for opt in opciones %}
+        <span class="celda-wrapper">
+            <div class="celda-content">
+                <input id="inputEtapa" value="{{opt[1][3]}}" class="opcion" type="image" src="{{opt[2][4].decode('ascii')}}"
+                width="140px" height="140px"
+                    onclick="destacar(this, {{opt[1][3]}}, 'div-opciones', 'valor_ant'); return false;">
+                    <span style="padding-top:10px;max-width:140px;" class="caption">{{opt[0][3]}}</span>
+                </div>
+            </span>
+        {% endfor %}
+    </div>
+    
+    <input type="hidden" id="valor_ant" name="valor_ant"{{valor_inicial}}/>
+    <input type="hidden" name="n_presupuesto" id="n_presupuesto" value="{{n_presupuesto}}"/>
+    <input type="hidden" name="tipo_ant" id="tipo_ant" value="opciones"/>
+    
+    
+    <button type="button" class="slide" id="button-siguiente" onclick='APIrequest({{posicion}}+1)'>
+        <div>Siguiente etapa</div>
+        <i class="icon-arrow-right"></i>
+    </button>
+    
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://api.minervatech.uy/static/js/portada.js"></script>
+{% endblock %}

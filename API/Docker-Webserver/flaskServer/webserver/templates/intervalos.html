@@ -1,0 +1,33 @@
+{% block content %}
+
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/style.css' />
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/opciones.css' />
+
+<div>
+	<div style="max-width:1024px;text-align:center; margin: 0 auto;">
+		<div id="div-titulo-4" class="titulo">
+			<h1> {{titulo}} </h1>
+		</div>
+		<div id="div-subtitulo-4" class="subtitulo">
+			<h3> {{subtitulo}} </h3>
+		</div>
+        <div id="div-opciones-4" class="opciones">
+			<input 	type="range" name="consumo" id="consumo" value="{{valor_inicial}}" min="{{minimo}}" max="{{maximo}}"
+			oninput="valor_ant.value = consumo.value" 
+			onchange="updateSlider(this.value)">
+				<h4>
+					<output id="valor_ant" name="valor_ant">{{valor_inicial}}</output> €
+				</h4>
+				<input type="hidden" name="n_presupuesto" id="n_presupuesto" value="{{n_presupuesto}}"/>
+			<input type="hidden" name="tipo_ant" id="tipo_ant" value="intervalos"/>
+		</div>
+		<button type="button" class="slide" id="button-siguiente" onclick='APIrequest({{posicion}}+1)'>
+			<div>Siguiente etapa</div>
+			<i class="fa fa-angle-right"></i>
+		</button>
+	</div>
+</div>
+
+<script type="text/javascript" src="https://api.minervatech.uy/static/js/validations.js"></script>
+
+{% endblock %}
