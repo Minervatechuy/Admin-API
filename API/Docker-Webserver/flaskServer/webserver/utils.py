@@ -7,9 +7,14 @@ def log(message):
         now = datetime.now()
         logfile.write(f"[{now}] ---> {message}\n")
 
-def writeLog(function, entrada, salida, pagina, usuario, debug):
-    if debug:
-        with open("logs/stdout.log", "a") as logfile:
-                now = datetime.now()
-                logfile.write(f"[{now}] - /{function} \n  |--> Entrada {entrada} \n  |--> Llamado desde {pagina} \n  |--> Llamado por {usuario} \n  |--> Salida {salida} \n")
+def writeLog(function, entrada, salida, pagina, usuario, debug, **kwargs):
+    with open("logs/stdout.log", "a") as logfile:
+        now = datetime.now()
+        logfile.write(f"[{now}] - /{function}\n")
+        logfile.write(f"  |--> Entrada: {entrada}\n")
+        logfile.write(f"  |--> Llamado desde: {pagina}\n")
+        logfile.write(f"  |--> Llamado por: {usuario}\n")
+        logfile.write(f"  |--> Salida: {salida}\n")
 
+        if debug and 'exception' in kwargs:
+            logfile.write(f"  |--> Exception: {str(kwargs['exception'])}\n")

@@ -18,7 +18,7 @@ app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 def index():
     return jsonify({'Autor': 'MinervaTech',
                     'Nombre': 'API Simulador',
-                    'Descripcion': 'Esta funcionando'}
+                    'Descripción': 'Esta funcionando'}
                     )
 
 
@@ -1918,7 +1918,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         writeLog("Nuevo presupuesto", [token, formula, email, telefono, nombre], n_presupuesto, "url_context", "usuario_context", "debug_context")
     else:
         # Insertar datos de la etapa anterior
-        if tipo_ant=="intervalos" or tipo_ant=="opciones":
+        if tipo_ant=="intervalos" or tipo_ant=="opciones" or tipo_ant=="geografica":
             # insert_presupuesto_data (presupuesto_id, etapa_id, meta_key, meta_value)
             presupuesto_id= n_presupuesto
             etapa_id= functionsDB.doStoredProcedure("get_id_de_posicion", [url, pos_actual-1])[0][0][0] # Saco el id de la etapa anterior
@@ -1942,9 +1942,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         nombre= n_presupuesto
         email= tipo_ant
         telefono= valor_ant
-        resultado_final= eval(generar_presupuesto(formula, token, n_presupuesto))
-        if resultado_final=="error": return render_template("error.html")
-
+        try:
+            resultado_final= eval(generar_presupuesto(formula, token, n_presupuesto))
+        except RuntimeError:
+            return render_template("error.html")
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])
         home_url= request.environ['HTTP_ORIGIN']
         return render_template("etapaFinal.html", resultado=resultado_final, url=home_url)
@@ -2002,9 +2003,9 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
     elif tipo== "Geografica":
         stage_specific_info= functionsDB.doStoredProcedure("getStageInfo", args)[0]
-        direccion= stage_specific_info[2][3]
+        direccion= stage_specific_info[0][3]
         zoom= stage_specific_info[1][3]
-        latitud= stage_specific_info[0][3]
+        latitud= stage_specific_info[2][3]
         longitud= stage_specific_info[3][3]
 
         writeLog('vista_Geografica', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
@@ -2015,22 +2016,25 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
 def generar_presupuesto(formula, token, n_presupuesto):
     try:
-        stages_id_list= functionsDB.doStoredProcedure("getCalcStagesId", [token])[0]
-        id_list= []
-        for stage_id in stages_id_list: id_list.append(stage_id[0])
-        
-        stages_id_list= id_list
+        stages_id_list = functionsDB.doStoredProcedure("getCalcStagesId", [token])[0]
+        id_list = [stage_id[0] for stage_id in stages_id_list]
 
-        for id_stage in stages_id_list:
-            stage_value= functionsDB.doStoredProcedure("getStageInsertedValue", [id_stage, n_presupuesto])[0][0][0]
-            writeLog("cambio", "["+str(id_stage)+"]", str(stage_value), "url_context", "usuario_context", "debug_context")
-            formula= formula.replace("["+str(id_stage)+"]", str(stage_value))
-
+        for id_stage in id_list:
+            stage_values = functionsDB.doStoredProcedure("getStageInsertedValue", [id_stage, n_presupuesto])[0]
+            
+            if stage_values:
+                stage_value = stage_values[0][0]
+                writeLog("cambio", "[" + str(id_stage) + "]", str(stage_value), "url_context", "usuario_context", "debug_context")
+                formula = formula.replace("[" + str(id_stage) + "]", str(stage_value))
+            else:
+                writeLog("error", f"Stage values not found for id_stage: {id_stage}", "", "", "", True)
 
         writeLog("formula", [token], formula, "url_context", "usuario_context", "debug_context")
         return formula
-    except:
-        return "error"
+    except Exception as e:
+        writeLog("error", f"An error occurred in generar_presupuesto: {str(e)}", "", "", "", True, exception=e)
+        raise RuntimeError("An error occurred in generar_presupuesto: " + str(e))
+
 
 def tipoSigEtapa(pos):
     args=[pos]

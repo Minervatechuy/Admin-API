@@ -606,7 +606,7 @@ CREATE TABLE `calculators` (
 --
 
 INSERT INTO `calculators` (`token`, `url`, `ip`, `formula`, `entity_ID`, `name`, `activo`) VALUES
-('L4Fcb7WNqsWS-GZqLvRdfeJp-asLMEn87Ub', 'https://jorgeiglesias.eu/calculadora/', NULL, '5+[12]+1+[13]', '78995828M', 'Calculadora de presupuesto web', 1);
+('L4Fcb7WNqsWS-GZqLvRdfeJp-asLMEn87Ub', 'https://minervatech.uy/calculadora/', NULL, '5+[12]+1+[13]', '78995828M', 'Calculadora de presupuesto web', 1);
 
 -- --------------------------------------------------------
 

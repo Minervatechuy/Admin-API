@@ -1,4 +1,41 @@
-
 {% block content %}
-	<input type="hidden" id="geo-cargada" value="manolo"/>
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/style.css' />
+<link rel="stylesheet" href='https://api.minervatech.uy/static/css/opciones.css' />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&display=swap" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<div id="div-etapa-5" class="etapa">
+	<div style="max-width:1024px;text-align:center; margin: 0 auto;">
+		<div id="div-opciones-5" style="max-width:90vw !important; margin:0 auto;" class="opciones">
+			<div id="map"></div>
+			<!-- Address autocomplete input field -->
+			<input id="autocomplete" placeholder="Ingresa tu direccion" type="text" onFocus="initAutocomplete()" />
+
+			<input type="hidden" id="zoom" value="{{zoom}}">
+
+			<input type="hidden" id="direccion" value="{{direccion}}">
+
+			<input type="hidden" id="latitude" value="{{latitud}}">
+
+			<input type="hidden" id="longitude" value="{{longitud}}">
+
+			<button id="borrar">Eliminar Forma Seleccionada</button>
+
+			<!-- Display the computed area -->
+			<div>Area: <span id="value-1">0</span></div>
+
+			<!-- Hidden input to store the area value -->
+			<input type="hidden" id="hidden-value-1" name="hidden-value-1">
+			<input type="hidden" name="n_presupuesto" id="n_presupuesto" value="{{n_presupuesto}}" />
+			<input type="hidden" name="tipo_ant" id="tipo_ant_geo" value="geografica"/>
+		</div>
+		<br>
+		<button type="button" class="slide" id="button-siguiente" onclick='{{funcion_sig}}({{posicion}}+1)'>
+			<div>Siguiente etapa</div>
+			<i class="icon-arrow-right"></i>
+		</button>
+	</div>
+</div>
 {% endblock %}
