@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
   web:
+    build:
+     context: ./Web/Dockerfile
     image: lobsterk/web-nginx-php
     container_name: web
     restart: always
@@ -19,6 +21,7 @@ services:
   webserver:
     build:
       context: ./API/Docker-Webserver/flaskServer
+    image: lobsterk/web-flask-server
     ports:
       - "5000:5000"
     links:
