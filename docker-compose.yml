@@ -5,7 +5,7 @@ services:
     build:
      context: ./Web
      dockerfile: ./Dockerfile
-    image: lobsterk/web-nginx-php
+    image: fabianl1980/web-nginx-php
     container_name: web
     restart: always
     ports:
@@ -22,7 +22,7 @@ services:
   webserver:
     build:
       context: ./API/Docker-Webserver/flaskServer
-    image: lobsterk/web-flask-server
+    image: fabianl1980/web-flask-server
     ports:
       - "5000:5000"
     links:
