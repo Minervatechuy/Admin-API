@@ -433,7 +433,6 @@
                                                                 }
                                                             }
                                                         }
-                                                        alert("Etapas corectas ".$opcionesCorrectas);
                                                         if ($result_Formula != '' && $nEtapas>0 && $opcionesCorrectas){
                                                             echo  ' <div class="callout callout-success">
                                                                         <h5>Simulador activo</h5>
@@ -687,7 +686,11 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                       c
+                                        <th>Email Cliente</th>
+                                        <th>Nombre</th>
+                                        <th>Telefono</th>
+                                        <th>Fecha</th>
+                                        <th>Resultado</th>
                                     </tr>
                                 </thead>
                                 <tbody>

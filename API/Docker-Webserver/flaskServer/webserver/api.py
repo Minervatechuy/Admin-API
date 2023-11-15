@@ -1,15 +1,16 @@
 
 from flask import Flask, jsonify, render_template, request, json
-# from flask_cors import CORS  # Para que se permita la política CORS
+from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
+from mails import send_mail
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-# CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
@@ -18,13 +19,42 @@ app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 def index():
     return jsonify({'Autor': 'MinervaTech',
                     'Nombre': 'API Simulador',
-                    'Descripción': 'Esta funcionando'}
+                    'Descripción': 'Trabajo final UTEC'}
                     )
 
 
 # USUARIO 
 # --------------------------------------------------------------------------
 # Verifica que el user existe en la base de datos
+
+
+@app.route('/stripe_webhook', methods=['POST'])
+def stripe_webhook():
+    info = json.loads(request.data)
+    event = info['type']
+    datos_de_pago = info['data']['object']
+    
+    if event == 'checkout.session.completed':
+        try:
+            requestId = info['id']
+            timestamp = datos_de_pago['created']
+            amount = datos_de_pago['amount_total']/100
+            nombre = datos_de_pago['customer_details']['name']
+            email = datos_de_pago['customer_details']['email']
+            new_token = functionsDB.doStoredProcedure("comprar_token", [])[0][0][0]
+            send_mail(f"Gracias {nombre}!<br/>Compra correcta. A continuación el token de activación:<br/><br/><b><i>{new_token}</i></b><br/><br/>Equipo MinervaTech", "Licencia Simulador", email)
+        except Exception as e:
+            log(e)
+
+    if event == 'invoice.finalized':
+        log(f"{info}") 
+
+    if event == 'invoice.paid':
+        log(f"{info}") 
+
+    return "200"
+
+
 
 @app.route('/exist_usuario', methods=['POST'], endpoint='exist_usuario')
 def exist_usuario():
@@ -66,16 +96,6 @@ def get_usuario():
     # Se trae la información que viene de la vista en json
     info = json.loads(request.data)
 
-    # Se recoge la informacion de contexto
-    try:
-        usuario_context = info['usuario_context']
-        url_context = info['url_context']
-        debug_context = info['debug_context']
-    except:
-        usuario_context = "[Sin informacion]"
-        url_context = "[Sin informacion]"
-        debug_context = "[Sin informacion]"
-
     # Se toma el usuario del json anterior de cara a la búsqueda
     usuario = info["usuario"]
 
@@ -85,12 +105,10 @@ def get_usuario():
     # Se ejecuta el procedimiento almacenado
     try:
         result= functionsDB.doStoredProcedure("get_usuario", args)[0][0]
-
     except Exception as e:
+        log(f"{e}")
         result= []
-    # Registro en el log del movimiento
-    writeLog('get_usuario', args, result, url_context, usuario_context, debug_context)
-
+    
     # Se devuelve el resultado a la vista
     return jsonify({'result': result})
 
@@ -1183,8 +1201,6 @@ def insertOpcion():
             writeLog(f'insertOpcion{k}', args, "OK", url_context, usuario_context, debug_context)
             functionsDB.doStoredProcedure("insert_etapa_opcion", args) #- ( ID-ETAPA, keys_arr[k] info[keys_arr[k]] )
     
-        writeLog(f'insertOpcion', args, "OK", url_context, usuario_context, debug_context)
-
         return jsonify({'result':True, 'id_etapa': etapa_id})
     
     #except:
@@ -1199,15 +1215,6 @@ def getOpciones():
     # Se trae la información que viene de la vista en json
     info = json.loads(request.data)
 
-    try:
-        usuario_context = info['usuario_context']
-        url_context = info['url_context']
-        debug_context = info['debug_context']
-    except:
-        usuario_context = "[Sin informacion]"
-        url_context = "[Sin informacion]"
-        debug_context = "[Sin informacion]"
-
     # Se toma el token y la formula del json anterior de cara a la búsqueda
     identificador= info["identificador"]
     
@@ -1219,18 +1226,25 @@ def getOpciones():
     # Agrupo las opciones
     # Split a Python List into Chunks using For Loops
     our_list = result
-    chunked_list = list()
+    result = list()
     chunk_size = 3
     for i in range(0, len(our_list), chunk_size):
-        chunked_list.append(our_list[i:i+chunk_size])
+        result.append(our_list[i:i+chunk_size])
 
-    result= chunked_list
+    # Casteo para cambiar tuplas invariantes por listas modificables
+    for i in range(0,len(result)):
+        for j in range(0,len(result[i])):
+            result[i][j] = list(result[i][j])
 
-    # Se escriben los logs
-    writeLog('getOpciones', args, result, url_context, usuario_context, debug_context)
+    for i in range(0,len(result)):
+        for j in range(0,len(result[i])):
+            if j == 2:
+                result[i][j][4] = result[i][j][4].decode('utf-8')
 
     # Se devuelve el resultado
     return jsonify({'result': result})
+
+
 
 @app.route('/editOpcion', methods=['POST'], endpoint='editOpcion')
 def editOpcion():
@@ -1280,15 +1294,6 @@ def getOpcion():
     # Se trae la información que viene de la vista en json
     info = json.loads(request.data)
 
-    try:
-        usuario_context = info['usuario_context']
-        url_context = info['url_context']
-        debug_context = info['debug_context']
-    except:
-        usuario_context = "[Sin informacion]"
-        url_context = "[Sin informacion]"
-        debug_context = "[Sin informacion]"
-
     # Se toma el token y la formula del json anterior de cara a la búsqueda
     identificador= info["identificador"]
     
@@ -1297,8 +1302,14 @@ def getOpcion():
     # Se ejecuta el procedimiento almacenado
     result= functionsDB.doStoredProcedure("getOpcion", args)[0]
 
-    # Se escriben los logs
-    writeLog('getOpcion', args, result, url_context, usuario_context, debug_context)
+
+    # Casteo para cambiar tuplas invariantes por listas modificables
+    for i in range(0,len(result)):
+        result[i] = list(result[i])
+
+    for i in range(0,len(result)):
+        if i == 2:
+            result[i][4] = result[i][4].decode('utf-8')
 
     # Se devuelve el resultado
     return jsonify({'result': result})
@@ -1886,6 +1897,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
     # Se verifica que unicamente existe una vista para esta calculadora
     verficar_vista= functionsDB.doStoredProcedure("verficar_vista", [url])[0][0][0]
+    writeLog(verficar_vista, "", "", "url_context", "usuario_context", "debug_context")
     if verficar_vista!=1: 
         writeLog("FALLA 1875", "", "", "url_context", "usuario_context", "debug_context")
         return render_template("error.html")
@@ -2024,8 +2036,11 @@ def generar_presupuesto(formula, token, n_presupuesto):
             
             if stage_values:
                 stage_value = stage_values[0][0]
+                writeLog(id_stage, "1", "", "url_context", "usuario_context", "debug_context")
+                writeLog(stage_value, "2", "", "url_context", "usuario_context", "debug_context")
                 writeLog("cambio", "[" + str(id_stage) + "]", str(stage_value), "url_context", "usuario_context", "debug_context")
                 formula = formula.replace("[" + str(id_stage) + "]", str(stage_value))
+                writeLog(stage_value, "3", "", "url_context", "usuario_context", "debug_context")
             else:
                 writeLog("error", f"Stage values not found for id_stage: {id_stage}", "", "", "", True)
 

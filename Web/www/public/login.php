@@ -72,7 +72,7 @@
         </div>
         <div class="card" style="margin-top: 2em;">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Ingrese usufario y contraseña</p>
+                <p class="login-box-msg">Ingrese usuario y contraseña</p>
 
                 <!-- Formulario Login -->
                 <form action="login.php" method="post">

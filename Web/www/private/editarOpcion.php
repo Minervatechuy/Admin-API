@@ -153,4 +153,4 @@ if (!(isset($_POST["opcion_id"])))  header('Location: dashboard.php');
 
 </body>
 
-</html><
+</html>

@@ -110,12 +110,11 @@ h2.precioTotal {
 }
 
 #map {
-	height: 100vh;
-	width: 100vw;
-	overflow:hidden !important;
-	position: absolute !important;
-	top: 0;
-	z-index: 0;
+    height: 30vh;
+    width: 100%;
+    overflow: hidden !important;
+    position: relative !important; /* Change to relative to keep elements in the normal flow */
+    z-index: 0;
 }
 
 #panel {
@@ -314,4 +313,26 @@ div.map-img-container{
 	.positionLeft {
 		float: none;
 	}
+}
+
+#div-opciones-5 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#autocomplete {
+    margin: 10px; /* Adjust margin as needed */
+}
+
+#borrar {
+    margin: 10px; /* Adjust margin as needed */
+}
+
+#value-1 {
+    margin: 10px; /* Adjust margin as needed */
+}
+
+#button-siguiente {
+    margin: 10px; /* Adjust margin as needed */
 }
