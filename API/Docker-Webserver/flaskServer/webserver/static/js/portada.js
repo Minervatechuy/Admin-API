@@ -22,14 +22,16 @@ function APIrequest(sig_pos) {
         apiurl = apiurl + '/' + n_presupuesto + '/' + tipo + '/' + valor;
     }
 
-    console.log(apiurl)
-
     if (XMLHttpRequest) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', apiurl, true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var response = xhr.responseText;
+
+                if (tipo === 'geografica') {
+                    logInformation(direccion_url);
+                }
                 
                 var showMap = response.includes('<div id="map"></div>');
 
@@ -71,4 +73,43 @@ function destacar(btn, tipo, nombreDiv, inputEtapa) {
     // Resaltamos la opcion
     btn.style.opacity = "1";
     btn.style['-webkit-filter'] = "grayscale(0%)";
+}
+
+function logInformation(apiurl) {
+    var logWebhookUrl = 'https://api.minervatech.uy/insert_logs';
+    var direccionAutocomplete = document.getElementById('autocomplete').value;
+    var direccionHidden = document.getElementById('direccion').value;
+    var direccion = direccionAutocomplete ? direccionAutocomplete : direccionHidden;
+
+    var variablesToLog = [
+        { name: 'area', elementId: 'hidden-value-1' },
+        { name: 'latitud', elementId: 'latitude' },
+        { name: 'longitud', elementId: 'longitude' },
+        { name: 'direccion', elementId: 'direccion' },
+    ];
+
+    variablesToLog.forEach(function(variable) {
+        var element = document.getElementById(variable.elementId);
+
+        var logData = {
+            procedure: apiurl,
+            in: variable.name,
+            out: variable.name === 'direccion' ? direccion : element.value,
+        };
+
+        fetch(logWebhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(logData),
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Log Response:', data);
+        })
+        .catch(error => {
+            console.error('Error calling Log :', error);
+        });
+    });
 }

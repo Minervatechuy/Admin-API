@@ -2,6 +2,12 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
 -- Base de datos: `minervatech`
 --
@@ -447,6 +453,11 @@ END$$
 
 CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa_opcion` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510), IN `meta_value` VARCHAR(510), IN `imagen` LONGBLOB)  BEGIN 
 INSERT INTO `etapa_opcion` (`etapa_id`, `meta_key`, `meta_value`, `imagen`) VALUES ( etapa_id, meta_key, meta_value, imagen);
+END$$
+
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_log` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))  BEGIN
+    INSERT INTO logs (`date`, `time`, `procedure`, `in`, `out`)
+    VALUES (p_date, p_time, p_procedure, p_in, p_out);
 END$$
 
 CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_movement` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))  BEGIN
@@ -910,7 +921,28 @@ INSERT INTO `calculadoras_presupuestos_clientes` (`token`, `presupuestos_id`, `f
 ('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 351, '2023-11-14', 'asd'),
 ('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 352, '2023-11-14', 'asd'),
 ('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 353, '2023-11-14', 's'),
-('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 354, '2023-11-14', 'asd');
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 354, '2023-11-14', 'asd'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 355, '2023-11-15', 'carlostafura@gmail.com'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 356, '2023-11-15', 'carlostafura@gmail.com'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 357, '2023-11-15', 'asd'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 358, '2023-11-15', 'asd'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 359, '2023-11-15', 's'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 360, '2023-11-15', 'asd'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 361, '2023-11-15', 'asd'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 362, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 363, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 364, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 365, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 366, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 367, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 368, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 369, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 370, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 371, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 372, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 373, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 374, '2023-11-15', 'asdas'),
+('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 375, '2023-11-16', 'asdasda');
 
 -- --------------------------------------------------------
 
@@ -935,7 +967,7 @@ CREATE TABLE `calculators` (
 INSERT INTO `calculators` (`token`, `url`, `ip`, `formula`, `entity_ID`, `name`, `activo`) VALUES
 ('9rq(HgmFZ#/uZqutFRGYAwxFSH9bkdHQ5VRb', 'https://empresa1.uy', NULL, '[14]+10', '123123', 'Calculadora de la empresa 2', 1),
 ('L4Fcb7WNqsWS-GZqLvRdfeJp-asLMEn87Ub', 'https://cliente1.com.uy/calculadora/', NULL, '5+[12]+1+[13]', '78995828M', 'Calculadora de presupuesto web', 1),
-('q7Dafa)3_HVrpZHwenPujdKDB&nDMMMyykJb', 'https://minervatech.uy/simulador/', NULL, '[44]+[45]+[49]', '2890456789', 'Simulador1', 1),
+('q7Dafa)3_HVrpZHwenPujdKDB&nDMMMyykJb', 'https://minervatech.uy/simulador/', NULL, '[44]+[45]-[49]+[56]', '2890456789', 'Simulador1', 1),
 ('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 'https://minervatech.uy/simulador2/', NULL, '[54]+[55]', '289578985663', 'Posta', 1);
 
 -- --------------------------------------------------------
@@ -965,8 +997,10 @@ INSERT INTO `clientes` (`email`, `name`, `telephone`) VALUES
 ('ASDA', 'ASDDS', 'ASD'),
 ('asdas', 'sadas', 'asdas'),
 ('asdasd', 'dssad', 'asdas'),
+('asdasda', 'dssad', 'asd'),
 ('asdsa', 'sdad', 'asdas'),
 ('asf@harakirimail.com', 'paquito', '666777888'),
+('carlostafura@gmail.com', 'carlos tafura', '096229511'),
 ('cliente_prueba@minervatech.uy', 'Pruebas ', '683 745 695'),
 ('dzf', 'Maxi', 'fds'),
 ('gabi@minervatech.uy', 'Gabriela', '683 258 761'),
@@ -1209,9 +1243,35 @@ CREATE TABLE `logs` (
   `date` varchar(20) NOT NULL,
   `time` varchar(8) NOT NULL,
   `procedure` varchar(255) NOT NULL,
-  `in` varchar(1000) NOT NULL,
-  `out` varchar(1000) NOT NULL
+  `in` varchar(10000) NOT NULL,
+  `out` varchar(10000) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `logs`
+--
+
+INSERT INTO `logs` (`date`, `time`, `procedure`, `in`, `out`) VALUES
+('2023-11-15', '23:22:28', 'https:!!minervatech.uy!simulador2!', 'area', '1326'),
+('2023-11-15', '23:22:28', 'https:!!minervatech.uy!simulador2!', 'latitud', '-34.9465946'),
+('2023-11-15', '23:22:28', 'https:!!minervatech.uy!simulador2!', 'longitud', '-54.93192149999999'),
+('2023-11-15', '23:22:28', 'https:!!minervatech.uy!simulador2!', 'direccion', 'Cordón, Montevideo Departamento de Montevideo, Uruguay'),
+('2023-11-15', '23:29:21', 'https:!!minervatech.uy!simulador2!', 'area', '4622'),
+('2023-11-15', '23:29:21', 'https:!!minervatech.uy!simulador2!', 'latitud', '-34.9041401'),
+('2023-11-15', '23:29:21', 'https:!!minervatech.uy!simulador2!', 'longitud', '-56.1784106'),
+('2023-11-15', '23:29:21', 'https:!!minervatech.uy!simulador2!', 'direccion', 'Cordón, Montevideo Departamento de Montevideo, Uruguay'),
+('2023-11-15', '23:30:00', 'https:!!minervatech.uy!simulador2!', 'area', '4515'),
+('2023-11-15', '23:30:00', 'https:!!minervatech.uy!simulador2!', 'latitud', '-34.9465946'),
+('2023-11-15', '23:30:00', 'https:!!minervatech.uy!simulador2!', 'longitud', '-54.93192149999999'),
+('2023-11-15', '23:30:00', 'https:!!minervatech.uy!simulador2!', 'direccion', 'Patagonia, Punta del Este Maldonado Department, Uruguay'),
+('2023-11-15', '23:36:56', 'https:!!minervatech.uy!simulador2!', 'latitud', '-34.9041401'),
+('2023-11-15', '23:36:56', 'https:!!minervatech.uy!simulador2!', 'area', '5646'),
+('2023-11-15', '23:36:57', 'https:!!minervatech.uy!simulador2!', 'longitud', '-56.1784106'),
+('2023-11-15', '23:36:57', 'https:!!minervatech.uy!simulador2!', 'direccion', 'Cordón, Montevideo Departamento de Montevideo, Uruguay'),
+('2023-11-15', '23:39:22', 'https:!!minervatech.uy!simulador2!', 'area', '14336'),
+('2023-11-15', '23:39:22', 'https:!!minervatech.uy!simulador2!', 'latitud', '-34.9041401'),
+('2023-11-15', '23:39:22', 'https:!!minervatech.uy!simulador2!', 'longitud', '-56.1784106'),
+('2023-11-15', '23:39:22', 'https:!!minervatech.uy!simulador2!', 'direccion', 'Cordón, Montevideo Departamento de Montevideo, Uruguay');
 
 -- --------------------------------------------------------
 
@@ -1584,7 +1644,28 @@ INSERT INTO `presupuestos` (`id`, `resultado`, `formula`, `finalizado`) VALUES
 (351, NULL, '[52]+[54]', 0),
 (352, 110, '[54]+[55]', 0),
 (353, NULL, '[54]+[55]', 0),
-(354, 141, '[54]+[55]', 0);
+(354, 141, '[54]+[55]', 0),
+(355, NULL, '[54]+[55]', 0),
+(356, 4, '[54]+[55]', 0),
+(357, NULL, '[54]+[55]', 0),
+(358, NULL, '[54]+[55]', 0),
+(359, NULL, '[54]+[55]', 0),
+(360, 333, '[54]+[55]', 0),
+(361, NULL, '[54]+[55]', 0),
+(362, NULL, '[54]+[55]', 0),
+(363, NULL, '[54]+[55]', 0),
+(364, NULL, '[54]+[55]', 0),
+(365, NULL, '[54]+[55]', 0),
+(366, NULL, '[54]+[55]', 0),
+(367, NULL, '[54]+[55]', 0),
+(368, NULL, '[54]+[55]', 0),
+(369, NULL, '[54]+[55]', 0),
+(370, NULL, '[54]+[55]', 0),
+(371, NULL, '[54]+[55]', 0),
+(372, NULL, '[54]+[55]', 0),
+(373, NULL, '[54]+[55]', 0),
+(374, NULL, '[54]+[55]', 0),
+(375, NULL, '[54]+[55]', 0);
 
 -- --------------------------------------------------------
 
@@ -2269,7 +2350,45 @@ INSERT INTO `presupuestos_data` (`id`, `presupuesto_id`, `meta_key`, `meta_value
 (662, 353, 'valor-opciones', '1', 54),
 (663, 354, 'valor-opciones', '2', 54),
 (664, 354, 'valor-geografica', '139', 55),
-(665, 354, 'valor-geografica', '139', 57);
+(665, 354, 'valor-geografica', '139', 57),
+(666, 355, 'valor-opciones', '1', 54),
+(667, 356, 'valor-opciones', '1', 54),
+(668, 356, 'valor-geografica', '3', 55),
+(669, 356, 'valor-geografica', '3', 57),
+(670, 357, 'valor-opciones', '3', 54),
+(671, 357, 'valor-geografica', '126', 55),
+(672, 358, 'valor-opciones', '3', 54),
+(673, 359, 'valor-opciones', '3', 54),
+(674, 359, 'valor-geografica', '376', 55),
+(675, 359, 'valor-geografica', '376', 55),
+(676, 360, 'valor-opciones', '2', 54),
+(677, 360, 'valor-geografica', '331', 55),
+(678, 360, 'valor-geografica', '331', 57),
+(679, 361, 'valor-opciones', '3', 54),
+(680, 362, 'valor-opciones', '3', 54),
+(681, 363, 'valor-opciones', '3', 54),
+(682, 363, 'valor-geografica', '121', 55),
+(683, 364, 'valor-opciones', '3', 54),
+(684, 364, 'valor-geografica', '121', 55),
+(685, 365, 'valor-opciones', '3', 54),
+(686, 365, 'valor-geografica', '10075', 55),
+(687, 366, 'valor-opciones', '3', 54),
+(688, 366, 'valor-geografica', '414', 55),
+(689, 367, 'valor-opciones', '3', 54),
+(690, 367, 'valor-geografica', '385', 55),
+(691, 368, 'valor-opciones', '3', 54),
+(692, 368, 'valor-geografica', '1326', 55),
+(693, 369, 'valor-opciones', '3', 54),
+(694, 369, 'valor-geografica', '4622', 55),
+(695, 370, 'valor-opciones', '3', 54),
+(696, 370, 'valor-geografica', '4515', 55),
+(697, 371, 'valor-opciones', '3', 54),
+(698, 372, 'valor-opciones', '3', 54),
+(699, 373, 'valor-opciones', '3', 54),
+(700, 373, 'valor-geografica', '5646', 55),
+(701, 374, 'valor-opciones', '3', 54),
+(702, 374, 'valor-geografica', '14336', 55),
+(703, 375, 'valor-opciones', '3', 54);
 
 -- --------------------------------------------------------
 
@@ -2301,7 +2420,7 @@ INSERT INTO `tokens` (`token`, `vendido`, `canjeado`, `fechaFin`) VALUES
 ('r8bUKmHHVxEKBHUxvG4kQ+PHj?S7QmaWaqhb', 1, 0, '2024-12-31'),
 ('9rq(HgmFZ#/uZqutFRGYAwxFSH9bkdHQ5VRb', 1, 1, '2024-12-31'),
 ('_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb', 1, 1, '2024-12-31'),
-('zgJ7LgxmDMEbTMsp2qgs@2(_hxnXKU:QtfDb', 0, 0, '2024-12-31'),
+('zgJ7LgxmDMEbTMsp2qgs@2(_hxnXKU:QtfDb', 1, 0, '2024-12-31'),
 ('3aUGsnEGqdEEjZdFBb!gbAJH5fHzQDRq?z*b', 0, 0, '2024-12-31'),
 ('mUJb9bUUYgMYxKmney6AbVxMy:HEG)YgNfxb', 0, 0, '2024-12-31'),
 ('Tjwsg#VPEATJVZFfJ_F+QksrFHLagMYqt4b', 0, 0, '2024-12-31'),
@@ -2591,13 +2710,13 @@ ALTER TABLE `etapa_opcion`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=355;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos_data`
 --
 ALTER TABLE `presupuestos_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=666;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=704;
 
 --
 -- Restricciones para tablas volcadas

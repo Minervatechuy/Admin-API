@@ -54,7 +54,21 @@ def stripe_webhook():
 
     return "200"
 
+@app.route('/insert_logs', methods=['POST'])
+def insert_logs():
+    try:
+        data = json.loads(request.data)
+        date = datetime.now().strftime('%Y-%m-%d')
+        time = datetime.now().strftime('%H:%M:%S')
+        procedure = data.get('procedure')
+        log_in = data.get('in')
+        log_out = data.get('out')
 
+        functionsDB.doStoredProcedure("insert_log", [date, time, procedure, log_in, log_out])
+        
+        return "200"
+    except Exception as e:
+        log(e)
 
 @app.route('/exist_usuario', methods=['POST'], endpoint='exist_usuario')
 def exist_usuario():
@@ -2014,11 +2028,12 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         return render_template("opciones.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, opciones=new_options)
 
     elif tipo== "Geografica":
-        stage_specific_info= functionsDB.doStoredProcedure("getStageInfo", args)[0]
-        direccion= stage_specific_info[0][3]
-        zoom= stage_specific_info[1][3]
-        latitud= stage_specific_info[2][3]
-        longitud= stage_specific_info[3][3]
+        stage_specific_info = functionsDB.doStoredProcedure("getStageInfo", args)[0]
+        info_dict = {row[2]: row[3] for row in stage_specific_info}
+        direccion = info_dict.get('direccion', None)
+        zoom = info_dict.get('zoom', None)
+        latitud = info_dict.get('latitud', None)
+        longitud = info_dict.get('longitud', None)
 
         writeLog('vista_Geografica', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
         writeLog('posicion', posicion, "", "url_context", "usuario_context", "debug_context")
