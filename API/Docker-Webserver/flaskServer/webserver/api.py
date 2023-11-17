@@ -1108,18 +1108,42 @@ def getStageInfo():
         debug_context = "[Sin informacion]"
 
     # Se toma el token y la formula del json anterior de cara a la búsqueda
-    identificador= info["identificador"]
+    identificador = info["identificador"]
     
-    args= [identificador]
+    args = [identificador]
 
     # Se ejecuta el procedimiento almacenado
-    result= functionsDB.doStoredProcedure("getStageInfo", args)[0]
+    result = functionsDB.doStoredProcedure("getStageInfo", args)[0]
 
     # Se escriben los logs
     writeLog('getStageInfo', args, result, url_context, usuario_context, debug_context)
 
-    # Se devuelve el resultado
-    return jsonify({'result': result})
+    # Obtener información específica de la etapa
+    stage_specific_info = functionsDB.doStoredProcedure("getStageInfo", args)[0]
+
+    # Mapear las claves meta a nombres de variables
+    meta_key_mapping = {
+        'maximo': 'maximo',
+        'minimo': 'minimo',
+        'valor_inicial': 'valor_inicial',
+        'rangos': 'rangos'
+    }
+
+    # Inicializar un diccionario para almacenar los valores
+    meta_values = {}
+
+    # Iterar sobre las filas de stage_specific_info y mapear las claves meta a nombres de variables
+    for row in stage_specific_info:
+        meta_key = row[2]
+        if meta_key in meta_key_mapping:
+            variable_name = meta_key_mapping[meta_key]
+            meta_values[variable_name] = row[3]
+
+    # Devolver el resultado y los valores específicos
+    return jsonify({
+        'result': result,
+        **meta_values
+    })
 
 @app.route('/editEtapa', methods=['POST'], endpoint='editEtapa')
 def editEtapa():
@@ -1157,13 +1181,12 @@ def editEtapa():
         functionsDB.doStoredProcedure("edit_etapa", args)
         writeLog('editEtapa', etapa_id, "OK", url_context, usuario_context, debug_context)
 
-        # Se guardan los datos de las etapas v
-        for k in range (4,len(info)):
-            clave= keys_arr[k]
-            valor= info[keys_arr[k]]
-            args= [etapa_id, clave, valor]
-            writeLog('editEtapaData', args, "OK", url_context, usuario_context, debug_context)
-            functionsDB.doStoredProcedure("edit_etapa_data", args) 
+        # Se guardan los datos de las etapas
+        for clave, valor in info.items():
+            if clave not in ['usuario_context', 'url_context', 'debug_context', 'usuario', 'etapa_id', 'titulo', 'subtitulo']:
+                args = [etapa_id, clave, valor]
+                writeLog('editEtapaData', args, "OK", url_context, usuario_context, debug_context)
+                functionsDB.doStoredProcedure("edit_etapa_data", args)
 
         return jsonify({'result':True})
     
@@ -1946,12 +1969,11 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         # Insertar datos de la etapa anterior
         if tipo_ant=="intervalos" or tipo_ant=="opciones" or tipo_ant=="geografica":
             # insert_presupuesto_data (presupuesto_id, etapa_id, meta_key, meta_value)
-            presupuesto_id= n_presupuesto
             etapa_id= functionsDB.doStoredProcedure("get_id_de_posicion", [url, pos_actual-1])[0][0][0] # Saco el id de la etapa anterior
             meta_key= "valor-"+tipo_ant
             meta_value= valor_ant
 
-            args= [presupuesto_id, etapa_id, meta_key, meta_value]
+            args= [n_presupuesto, etapa_id, meta_key, meta_value]
             functionsDB.doStoredProcedure("insert_presupuesto_data", args)
 
             writeLog('VALOR INSERTADO:', args, "", "url_context", "usuario_context", "debug_context")
@@ -1965,7 +1987,6 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         tupla= functionsDB.doStoredProcedure("select_calc_by_url", [url])[0][0]
         token= tupla[0]
         formula= tupla[1]
-        nombre= n_presupuesto
         email= tipo_ant
         telefono= valor_ant
         try:
@@ -1990,20 +2011,33 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     posicion_etapa=stage_general_info[5]
 
     # Dependiendo el tipo de etapa se recogen unos datos u otos para crear las vistas renderizadas
-    if tipo== "Discreta": #Intervalos
+    if tipo == "Discreta":  # Intervalos
 
-        # Mediante el id se realiza la consulta, obteniendo así los datos especificos de la etapa
-        stage_specific_info= functionsDB.doStoredProcedure("getStageInfo", args)[0]
+        # Obtener información específica de la etapa
+        stage_specific_info = functionsDB.doStoredProcedure("getStageInfo", args)[0]
 
-        maximo= stage_specific_info[0][3]
-        minimo= stage_specific_info[1][3]
-        valor_inicial= stage_specific_info[2][3]
-        intervalo= stage_specific_info[3][3]
+        # Mapear las claves meta a nombres de variables
+        meta_key_mapping = {
+            'maximo': 'maximo',
+            'minimo': 'minimo',
+            'valor_inicial': 'valor_inicial',
+            'intervalo': 'rangos'
+        }
+
+        # Inicializar un diccionario para almacenar los valores
+        meta_values = {}
+
+        # Iterar sobre las filas de stage_specific_info y mapear las claves meta a nombres de variables
+        for row in stage_specific_info:
+            meta_key = row[2]
+            if meta_key in meta_key_mapping:
+                variable_name = meta_key_mapping[meta_key]
+                meta_values[variable_name] = row[3]
 
         writeLog('getStageInfo/Intevalos', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
 
-        #writeLog('vista_Intervalos', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
-        return render_template("intervalos.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, maximo=maximo, minimo= minimo, valor_inicial=valor_inicial, intervalo=intervalo)
+        return render_template("intervalos.html", funcion_sig=funcion_sig, posicion=posicion,
+                            n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, **meta_values)
 
     elif tipo== "Cualificada": #Opciones
         # Se verifica que la calculadora tiene opciones
@@ -2037,7 +2071,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         writeLog('vista_Geografica', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
         writeLog('posicion', posicion, "", "url_context", "usuario_context", "debug_context")
-        return render_template("geografica.html", funcion_sig=funcion_sig, posicion=posicion, titulo=titulo, subtitulo=subtitulo, direccion=direccion, zoom=zoom, latitud=latitud, longitud=longitud)
+        return render_template("geografica.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, direccion=direccion, zoom=zoom, latitud=latitud, longitud=longitud)
     
     return render_template("etapaFinal.html",pos_actual=pos_actual)
 

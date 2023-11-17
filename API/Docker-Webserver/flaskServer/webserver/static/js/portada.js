@@ -10,6 +10,7 @@ function APIrequest(sig_pos) {
         var tipo;
         if (document.getElementById("tipo_ant_geo") !== null) {
             tipo = document.getElementById("tipo_ant_geo").value;
+            n_presupuesto = document.getElementById("n_presupuesto_geo").value;
         } else {
             tipo = document.getElementById("tipo_ant").value;
         }
@@ -21,6 +22,8 @@ function APIrequest(sig_pos) {
         }
         apiurl = apiurl + '/' + n_presupuesto + '/' + tipo + '/' + valor;
     }
+
+    console.log(apiurl)
 
     if (XMLHttpRequest) {
         var xhr = new XMLHttpRequest();
@@ -51,11 +54,11 @@ function APIrequest(sig_pos) {
 } // Cierra la función
 
 function updateSlider(pConsumo) {
-    jQuery("valor_ant").val(pConsumo);
+    $("valor_ant").val(pConsumo);
 }
 
 function destacar(btn, tipo, nombreDiv, inputEtapa) {
-    var opciones = jQuery("div#" + nombreDiv + " .opcion");
+    var opciones = $("div#" + nombreDiv + " .opcion");
 
     // Aplicamos la función anonima para cambiarles el estilo a cada uno de ellos
     opciones.each(

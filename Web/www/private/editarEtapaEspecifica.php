@@ -22,8 +22,6 @@
         $type= $result[2];
         
         $_SESSION["tmp"]= $etapa_id;
-        alert("Llega, ".  $type);
-        alert("Siendo de tipo, ".  $_SESSION["tmp"]);
 
         if ($type=='Cualificada') header("Location: ".APPPATH."/private/editarEtapaEspecificaCualificada.php");
 
@@ -81,7 +79,7 @@
                         "subtitulo": "'.$subtitulo.'",
                         "minimo": "'.$min.'", 
                         "maximo": "'.$max.'", 
-                        "valor": "'.$valor.'", 
+                        "valor_inicial": "'.$valor.'", 
                         "rangos": "'.$rangos.'"
                     }';
                     $url = APIURL.'editEtapa';
@@ -172,7 +170,6 @@
 
                             <?php
                                 $type= $result[2];
-                                alert($type);
                                 if ($type =='Geografica'){
                                     require_once('editarEtapaEspecificaGeografica.php');
                                 }
@@ -183,8 +180,6 @@
                                     require_once('editarEtapaEspecificaContinua.php');
                                 }
                                 else if ($type=='Cualificada'){
-                                    $_SESSION["tmp"]= $etapa_id;
-                                    alert("Se manda, ".  $_SESSION["tmp"]);
                                     if ($type=='Cualificada') header("Location: ".APPPATH."/private/editarEtapaEspecificaCualificada.php");
                                 }
                             ?>
