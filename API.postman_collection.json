@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "d10abfca-259c-46bb-9142-1945f72424be",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24209025"
+	},
+	"item": [
+		{
+			"name": "http://localhost/getCalcsInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user\": \"gabriela.perez@estudiantes.utec.edu.uy\",\r\n  \"pwd\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getCalcsInfo",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getCalcsInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/get_usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\": \"gabriela.perez@estudiantes.utec.edu.uy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/get_usuario",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"get_usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/getUserEntities",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"usuario\": \"gabriela.perez@estudiantes.utec.edu.uy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getUserEntities",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getUserEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/getStagesGeneralInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getStagesGeneralInfo",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getStagesGeneralInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/getSpecificCalculatorInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getSpecificCalculatorInfo",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getSpecificCalculatorInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/getCalcFormula",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getCalcFormula",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getCalcFormula"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/getStageGeneralInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"identificador\": \"57\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/getStageGeneralInfo",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"getStageGeneralInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/get_presupuestos_entidad",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"entidad_id\": \"289578985663\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/get_presupuestos_entidad",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"get_presupuestos_entidad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/get_presupuestos_email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"gabriela.perez@estudiantes.utec.edu.uy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/get_presupuestos_email",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"get_presupuestos_email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/get_presupuestos_calculadoras_nombre",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"usuario\": \"gabriela.perez@estudiantes.utec.edu.uy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/get_presupuestos_calculadoras_nombre",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"get_presupuestos_calculadoras_nombre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost/get_presupuestos_calculadora",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"_yu5d_nnQzQt9KedPWgY2Pr&UhxmX*EXkvUb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.minervatech.uy/get_presupuestos_calculadora",
+					"protocol": "https",
+					"host": [
+						"api",
+						"minervatech",
+						"uy"
+					],
+					"path": [
+						"get_presupuestos_calculadora"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
