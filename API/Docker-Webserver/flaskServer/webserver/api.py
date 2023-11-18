@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-# from flask_cors import CORS  # Para que se permita la política CORS
+from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
@@ -10,7 +10,7 @@ from mails import send_mail
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-# CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
@@ -1991,11 +1991,14 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         telefono= valor_ant
         try:
             resultado_final= eval(generar_presupuesto(formula, token, n_presupuesto))
+            resultado_mes,promedio_mensual = get_monthly_average(formula, token, n_presupuesto, resultado_final)
+            writeLog("error", f"Stage values not found for id_stage: {resultado_mes}", "", "", "", True)
+            writeLog("error", f"Stage values not found for id_stage: {promedio_mensual}", "", "", "", True)
         except RuntimeError:
             return render_template("error.html")
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])
         home_url= request.environ['HTTP_ORIGIN']
-        return render_template("etapaFinal.html", resultado=resultado_final, url=home_url)
+        return render_template("etapaFinal.html", resultado=resultado_final, resultado_mes=resultado_mes, promedio_mensual=promedio_mensual, url=home_url)
 
     # Se obtiene el id de la url y la posicion actual
     args=[url, pos_actual]
@@ -2098,7 +2101,34 @@ def generar_presupuesto(formula, token, n_presupuesto):
     except Exception as e:
         writeLog("error", f"An error occurred in generar_presupuesto: {str(e)}", "", "", "", True, exception=e)
         raise RuntimeError("An error occurred in generar_presupuesto: " + str(e))
+    
+def get_monthly_average(formula, token, n_presupuesto, resultado_final):
+    try:
+        resultado_mes = 0
+        promedio_mensual = 0
 
+        stages_id_list = functionsDB.doStoredProcedure("getCalcStagesId", [token])[0]
+        id_list = [stage_id[0] for stage_id in stages_id_list]
+
+        for id_stage in id_list:
+            result_list = functionsDB.doStoredProcedure("get_monthly_average", [id_stage, n_presupuesto])[0]
+
+            if result_list and len(result_list) > 0:
+                promedio_mensual_tuple = result_list[0]
+                promedio_mensual_value = promedio_mensual_tuple[0]
+
+                if promedio_mensual_value is not None:
+                    promedio_mensual = promedio_mensual_value
+                    break
+                
+        if promedio_mensual != 0:
+            resultado_mes = max(0, int(resultado_final) // int(promedio_mensual))
+
+        return resultado_mes, promedio_mensual
+
+    except Exception as e:
+        writeLog("error", f"An error occurred in get_monthly_average: {str(e)}", "", "", "", True, exception=e)
+        return 0, 0
 
 def tipoSigEtapa(pos):
     args=[pos]
