@@ -5,7 +5,7 @@
     define ("FAVICONPATH", "../dist/img/logo-white.png");
     define ("LOGOWHITEPATH", "../dist/img/logo-white.png");
     define ("ICONPATH", "../dist/img/icon-logo-white.png");
-    define ("APPPATH", "http://admin.minervatech.uy:8080");
+    define ("APPPATH", "http://localhost:8172");
 
 
     define ("APIURL", "http://webserver:5000/");
@@ -13,8 +13,6 @@
 
     define ("APPLOGIN", "../public/login.php");
     define ("APPDASHBOARD", "../private/dashboard.php");
-?>
-
 
 
 

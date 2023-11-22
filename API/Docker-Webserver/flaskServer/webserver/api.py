@@ -42,7 +42,11 @@ def stripe_webhook():
             nombre = datos_de_pago['customer_details']['name']
             email = datos_de_pago['customer_details']['email']
             new_token = functionsDB.doStoredProcedure("comprar_token", [])[0][0][0]
-            send_mail(f"Gracias {nombre}!<br/>Compra correcta. A continuación el token de activación:<br/><br/><b><i>{new_token}</i></b><br/><br/>Equipo MinervaTech", "Licencia Simulador", email)
+            send_mail(f"Gracias {nombre}!<br/>Compra correcta. A continuación el token de activación:<br/><br/><b><i>{new_token}</i></b><br/><br/>"
+          f"Equipo MinervaTech<br/>"
+          f"Para cualquier consulta, no dudes en ponerte en contacto con nuestro equipo de soporte:<br/>"
+          f"Soporte técnico: soporte@minervatech.uy<br/>"
+          f"WhatsApp: +59895738995", "Licencia Simulador", email)
         except Exception as e:
             log(e)
 
@@ -1990,10 +1994,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         email= tipo_ant
         telefono= valor_ant
         try:
-            resultado_final= eval(generar_presupuesto(formula, token, n_presupuesto))
+            resultado_final= round(eval(generar_presupuesto(formula, token, n_presupuesto)))
             resultado_mes,promedio_mensual = get_monthly_average(formula, token, n_presupuesto, resultado_final)
-            writeLog("error", f"Stage values not found for id_stage: {resultado_mes}", "", "", "", True)
-            writeLog("error", f"Stage values not found for id_stage: {promedio_mensual}", "", "", "", True)
+            writeLog("resultado_mes", f"resultado_mes: {resultado_mes}", "", "", "", True)
+            writeLog("promedio_mensual", f"promedio_mensual: {promedio_mensual}", "", "", "", True)
         except RuntimeError:
             return render_template("error.html")
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])

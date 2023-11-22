@@ -1,4 +1,4 @@
-<?php 
+    <?php 
         require_once('../config/context.php');
         $etapa_creada= 0;
         if (isset($_POST["submit"]) AND (isset($_POST["tipo_etapa"])) ) {
