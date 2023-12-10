@@ -1,6 +1,6 @@
 function APIrequest(sig_pos) {
     var direccion_url = encodeURI(window.location.href).replaceAll('/', '!');
-    var apiurl = 'https://api.minervatech.uy/show_etapa/' + sig_pos + '/' + direccion_url;
+    var apiurl = 'https://api.cloud.minervatech.uy/show_etapa/' + sig_pos + '/' + direccion_url;
 
     // Se recogen los valores de la etapa anterior haciendo una especie de isset
     if (document.getElementById("n_presupuesto") !== null &&
@@ -79,7 +79,7 @@ function destacar(btn, tipo, nombreDiv, inputEtapa) {
 }
 
 function logInformation(apiurl) {
-    var logWebhookUrl = 'https://api.minervatech.uy/insert_logs';
+    var logWebhookUrl = 'https://api.cloud.minervatech.uy/insert_logs';
     var direccionAutocomplete = document.getElementById('autocomplete').value;
     var direccionHidden = document.getElementById('direccion').value;
     var direccion = direccionAutocomplete ? direccionAutocomplete : direccionHidden;
