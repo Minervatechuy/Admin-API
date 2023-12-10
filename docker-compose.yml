@@ -23,7 +23,6 @@ services:
     build:
       context: ./API/Docker-Webserver/flaskServer
       dockerfile: ./dockerfile
-    image: fabianl1980/web-flask-server
     ports:
       - "5000:5000"
     links:
