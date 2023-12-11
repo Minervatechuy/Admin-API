@@ -2152,14 +2152,12 @@ def tipoSigEtapa(pos):
     return tipo
 
 def encrypt(value: str) -> str:
-    """encrypt a value"""
     key = "KWkPbFZPN3EU4IkmLPZKMSkseqwDotMQNyZ9IMkrmDA="
     f = Fernet(str.encode(key))
     return f.encrypt(str.encode(value)).decode()
 
 
 def decrypt(value: str) -> str:
-    """pass in the key and value to decrypt"""
     key = "KWkPbFZPN3EU4IkmLPZKMSkseqwDotMQNyZ9IMkrmDA="
     f = Fernet(str.encode(key))
     decrypted = f.decrypt(str.encode(value))
