@@ -33,9 +33,9 @@ function APIrequest(sig_pos) {
                 var response = xhr.responseText;
 
                 if (tipo === 'geografica') {
-                    logInformation(direccion_url);
+                    logInformation(direccion_url, n_presupuesto);
                 }
-                
+
                 var showMap = response.includes('<div id="map"></div>');
 
                 document.getElementById('div_response').style.display = showMap ? 'none' : 'block';
@@ -78,7 +78,7 @@ function destacar(btn, tipo, nombreDiv, inputEtapa) {
     btn.style['-webkit-filter'] = "grayscale(0%)";
 }
 
-function logInformation(apiurl) {
+function logInformation(apiurl, n_presupuesto) {
     var logWebhookUrl = 'https://api.cloud.minervatech.uy/insert_logs';
     var direccionAutocomplete = document.getElementById('autocomplete').value;
     var direccionHidden = document.getElementById('direccion').value;
@@ -91,11 +91,12 @@ function logInformation(apiurl) {
         { name: 'direccion', elementId: 'direccion' },
     ];
 
-    variablesToLog.forEach(function(variable) {
+    variablesToLog.forEach(function (variable) {
         var element = document.getElementById(variable.elementId);
 
         var logData = {
             procedure: apiurl,
+            presupuesto_id: n_presupuesto,
             in: variable.name,
             out: variable.name === 'direccion' ? direccion : element.value,
         };
@@ -107,13 +108,13 @@ function logInformation(apiurl) {
             },
             body: JSON.stringify(logData),
         })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Log Response:', data);
-        })
-        .catch(error => {
-            console.error('Error calling Log :', error);
-        });
+            .then(response => response.text())
+            .then(data => {
+                console.log('Log Response:', data);
+            })
+            .catch(error => {
+                console.error('Error calling Log :', error);
+            });
     });
 }
 

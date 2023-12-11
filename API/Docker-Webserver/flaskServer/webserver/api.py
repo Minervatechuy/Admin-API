@@ -66,10 +66,11 @@ def insert_logs():
         date = datetime.now().strftime('%Y-%m-%d')
         time = datetime.now().strftime('%H:%M:%S')
         procedure = data.get('procedure')
+        presupuesto_id = data.get('presupuesto_id')
         log_in = data.get('in')
         log_out = data.get('out')
 
-        functionsDB.doStoredProcedure("insert_log", [date, time, procedure, log_in, log_out])
+        functionsDB.doStoredProcedure("insert_log", [date, time, procedure, presupuesto_id, log_in, log_out])
         
         return "200"
     except Exception as e:
