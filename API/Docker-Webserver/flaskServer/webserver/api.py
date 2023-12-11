@@ -5,6 +5,8 @@ from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
 from mails import send_mail
+from cryptography.fernet import Fernet
+import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
@@ -13,7 +15,6 @@ app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
-
 
 @app.route('/', methods=['GET']) 
 def index():
@@ -92,14 +93,19 @@ def exist_usuario():
     usuario = info['usuario']
     pwd = info['pwd']
 
+    arg_pass = [usuario]
+    password = functionsDB.doStoredProcedure("get_usuario_pass", arg_pass)[0][0]
+   
+    hashed_password = decrypt(password[0])
+
     # Se monta el array de entradas
-    args = [usuario, pwd]
+    args = [usuario, hashed_password]
 
     # Se ejecuta el procedimiento almacenado accediendo ademas a su resultado
-    result = functionsDB.doStoredProcedure("exist_usuario", args)[0][0][0]
+    result = 1 if hashed_password == pwd else 0
 
     # Se realizan los logs 
-    writeLog('exist_usuario', args, result, url_context, usuario_context, debug_context)
+    writeLog('exist_usuario', args, hashed_password, url_context, usuario_context, debug_context)
 
     # Se devuelve el resultado en formato JSON
     return jsonify({'result': result}) 
@@ -440,8 +446,10 @@ def insert_usuario():
     now= now = datetime.now()
     imagen= info["imagen"]
 
+    hashed_password = encrypt(password)
+
     # Se crea la lista de argumentos
-    args= [email, password, nombre, now, ip, apellidos, imagen]
+    args= [email, hashed_password, nombre, now, ip, apellidos, imagen]
     
     # Se ejecuta el procedimiento almacenado
     functionsDB.doStoredProcedure("insert_usuario", args)
@@ -520,9 +528,12 @@ def editProfile():
     email= info["user"]
     password= info["contrasena"]
     #imagen= info["imagen"]
-    telefono= info["telefono"] 
+    telefono= info["telefono"]
+
+    hashed_password = encrypt(password)
+
     # Se crea la lista de argumentos
-    args= [email, password, nombre, telefono, apellidos]
+    args= [email, hashed_password, nombre, telefono, apellidos]
     
     # Se ejecuta el procedimiento almacenado
     functionsDB.doStoredProcedure("editProfile", args)
@@ -2139,3 +2150,17 @@ def tipoSigEtapa(pos):
     tipo= functionsDB.doStoredProcedure("getTipoEtapa", args)[0][0][0]
     writeLog("tipoSigEtapa", args , tipo, "url_context", "usuario_context", "debug_context")
     return tipo
+
+def encrypt(value: str) -> str:
+    """encrypt a value"""
+    key = "KWkPbFZPN3EU4IkmLPZKMSkseqwDotMQNyZ9IMkrmDA="
+    f = Fernet(str.encode(key))
+    return f.encrypt(str.encode(value)).decode()
+
+
+def decrypt(value: str) -> str:
+    """pass in the key and value to decrypt"""
+    key = "KWkPbFZPN3EU4IkmLPZKMSkseqwDotMQNyZ9IMkrmDA="
+    f = Fernet(str.encode(key))
+    decrypted = f.decrypt(str.encode(value))
+    return decrypted.decode()

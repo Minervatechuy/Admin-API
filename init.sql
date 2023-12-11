@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.0.4deb2+deb11u1
--- https://www.phpmyadmin.net/
---
--- Servidor: localhost:3306
--- Tiempo de generación: 18-11-2023 a las 01:04:25
--- Versión del servidor: 10.5.21-MariaDB-0+deb11u1
--- Versión de PHP: 7.4.33
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -25,11 +16,11 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `add_usuario_entidad` (IN `mail` VARCHAR(510), IN `entidad` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `add_usuario_entidad` (IN `mail` VARCHAR(510), IN `entidad` VARCHAR(510))   BEGIN
 INSERT INTO `users_to_entites` (`user_email`, `entity_id`) VALUES (mail, entidad);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `comprar_token` ()  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `comprar_token` ()   BEGIN
 
 SELECT token INTO @token FROM `tokens` WHERE vendido=0 LIMIT 1;
 UPDATE `tokens` SET `vendido` = '1'  WHERE token=@token;
@@ -37,13 +28,13 @@ SELECT @token;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `count_users_by_email` (IN `emai` VARCHAR(255))  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `count_users_by_email` (IN `emai` VARCHAR(255))   BEGIN 
 	SELECT count(mail) 
     FROM users
     WHERE mail=email AND  pass=pasw;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `createCalculator` (IN `token` VARCHAR(40), IN `url` VARCHAR(255), IN `ip` VARCHAR(255), IN `entidad` VARCHAR(50), IN `nombre` VARCHAR(120), IN `email` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `createCalculator` (IN `token` VARCHAR(40), IN `url` VARCHAR(255), IN `ip` VARCHAR(255), IN `entidad` VARCHAR(50), IN `nombre` VARCHAR(120), IN `email` VARCHAR(255))   BEGIN
 
 	DECLARE pToken VARCHAR(40);
     DECLARE pUrl VARCHAR(255);
@@ -78,14 +69,14 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `createCalculator` (IN `token
     WHERE c.token = pToken;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `create_entidad` (IN `id` VARCHAR(510), IN `nombre` VARCHAR(510), IN `telefono` VARCHAR(510), IN `direccion` VARCHAR(510), IN `type` VARCHAR(510), IN `activo` VARCHAR(510), IN `descripcion` VARCHAR(510), IN `usuario` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `create_entidad` (IN `id` VARCHAR(510), IN `nombre` VARCHAR(510), IN `telefono` VARCHAR(510), IN `direccion` VARCHAR(510), IN `type` VARCHAR(510), IN `activo` VARCHAR(510), IN `descripcion` VARCHAR(510), IN `usuario` VARCHAR(510))   BEGIN
 
 INSERT INTO `entities` (`ID`, `nombre`, `telefono`, `direccion`, `type`, `activo`, `descripcion`) VALUES (id, nombre, telefono, direccion, type, '1', descripcion);
 INSERT INTO `users_to_entites` VALUES (usuario, id);
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `create_presupuesto` (IN `token` VARCHAR(255), IN `formula` VARCHAR(255), IN `email_cliente` VARCHAR(510), IN `name_cliente` VARCHAR(510), IN `telefono_cliente` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `create_presupuesto` (IN `token` VARCHAR(255), IN `formula` VARCHAR(255), IN `email_cliente` VARCHAR(510), IN `name_cliente` VARCHAR(510), IN `telefono_cliente` VARCHAR(510))   BEGIN
 
 INSERT INTO `presupuestos` (`id`, `resultado`, `formula`, `finalizado`) VALUES (NULL, NULL, formula, '0');
 
@@ -97,7 +88,7 @@ SELECT LAST_INSERT_ID();
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_calc` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_calc` (IN `token` VARCHAR(255))   BEGIN
 SET foreign_key_checks = 0;
 DELETE FROM `calculators` WHERE `calculators`.`token` = token;
 SET foreign_key_checks = 1;
@@ -106,16 +97,16 @@ UPDATE `tokens` SET `canjeado` = '0' WHERE `tokens`.`token` = token;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_dato_de_etapa` (IN `etapa_id` INT)  DELETE FROM `etapa_data` WHERE `etapa_data`.`etapa_id` = etapa_id$$
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_dato_de_etapa` (IN `etapa_id` INT)   DELETE FROM `etapa_data` WHERE `etapa_data`.`etapa_id` = etapa_id$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_entidad` (IN `entidad_id` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_entidad` (IN `entidad_id` VARCHAR(255))   BEGIN
 SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM `users_to_entites` WHERE `users_to_entites`.`entity_id` = entidad_id;
 DELETE FROM `entities` WHERE `entities`.`ID` = entidad_id;
 SET FOREIGN_KEY_CHECKS=1;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa` (IN `identificador` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa` (IN `identificador` INT)   BEGIN
 
 SELECT e.posicion, e.token
 INTO @pos, @tok
@@ -128,57 +119,57 @@ UPDATE etapa e SET e.posicion = e.posicion-1 WHERE e.token = @tok and e.posicion
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510))   BEGIN
 
 DELETE FROM `etapa_data` WHERE `etapa_data`.`etapa_id` =etapa_id AND `etapa_data`.`meta_key`=meta_key;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_de_calculadora` (IN `token` VARCHAR(255))  DELETE FROM `etapa` WHERE `etapa`.`token` = token$$
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_de_calculadora` (IN `token` VARCHAR(255))   DELETE FROM `etapa` WHERE `etapa`.`token` = token$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_opcion` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_etapa_opcion` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510))   BEGIN
 DELETE FROM etapa_opcion WHERE etapa_opcion.etapa_id = etapa_id AND etapa_opcion.meta_key=meta_key;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_opcion` (IN `etapa_id` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_opcion` (IN `etapa_id` INT)   BEGIN
 DELETE FROM etapa_opcion WHERE etapa_opcion.id= etapa_id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_opcion_de_etapa` (IN `etapa_id` INT)  DELETE FROM `etapa_opcion` WHERE `etapa_opcion`.`etapa_id` = etapa_id$$
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_opcion_de_etapa` (IN `etapa_id` INT)   DELETE FROM `etapa_opcion` WHERE `etapa_opcion`.`etapa_id` = etapa_id$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_user` (IN `email` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_user` (IN `email` VARCHAR(255))   BEGIN
 DELETE FROM users
 WHERE email= email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_usuario_entidad` (IN `email` VARCHAR(510), IN `entidad_id` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `delete_usuario_entidad` (IN `email` VARCHAR(510), IN `entidad_id` VARCHAR(510))   BEGIN
 DELETE FROM `users_to_entites` WHERE `users_to_entites`.`user_email` = email AND `users_to_entites`.`entity_id` = entidad_id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `editProfile` (IN `email` VARCHAR(255), IN `pass` VARCHAR(255), IN `nombre` VARCHAR(255), IN `tlf` VARCHAR(255), IN `apellidos` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `editProfile` (IN `email` VARCHAR(255), IN `pass` VARCHAR(255), IN `nombre` VARCHAR(255), IN `tlf` VARCHAR(255), IN `apellidos` VARCHAR(255))   BEGIN
 UPDATE `6705937_calculadoras`.`usuarios` SET `pass` = pass, `telefono` = tlf, `nombre` = nombre, `apellidos` = apellidos 
 WHERE (`mail` = email);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `editStagePos` (IN `id` INT, IN `pos` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `editStagePos` (IN `id` INT, IN `pos` INT)   BEGIN
 UPDATE `etapa` SET `posicion` = pos WHERE `etapa`.`id` = id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_calulators` (IN `token` VARCHAR(255), IN `nombre` VARCHAR(255), IN `url` VARCHAR(255), IN `entidad` VARCHAR(255))  UPDATE `calculators` SET `url` = url, `entity_ID` = entidad, `name` = nombre WHERE `calculators`.`token` = token$$
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_calulators` (IN `token` VARCHAR(255), IN `nombre` VARCHAR(255), IN `url` VARCHAR(255), IN `entidad` VARCHAR(255))   UPDATE `calculators` SET `url` = url, `entity_ID` = entidad, `name` = nombre WHERE `calculators`.`token` = token$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_entidad` (IN `id` VARCHAR(255), IN `nombre` VARCHAR(510), IN `telefono` VARCHAR(510), IN `direccion` VARCHAR(510), IN `tipo` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_entidad` (IN `id` VARCHAR(255), IN `nombre` VARCHAR(510), IN `telefono` VARCHAR(510), IN `direccion` VARCHAR(510), IN `tipo` VARCHAR(510))   BEGIN
 UPDATE `entities` SET `ID` = id, `nombre` = nombre, `telefono` = telefono, `direccion` = direccion, `type` = tipo WHERE `entities`.`ID` = id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa` (IN `etapa_id` INT, IN `titulo` VARCHAR(255), IN `subtitulo` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa` (IN `etapa_id` INT, IN `titulo` VARCHAR(255), IN `subtitulo` VARCHAR(255))   BEGIN
 UPDATE `etapa` SET `titulo` = titulo, `subtitulo` = subtitulo WHERE `etapa`.`id` = etapa_id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(255), IN `meta_value` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(255), IN `meta_value` VARCHAR(255))   BEGIN
 UPDATE `etapa_data` SET `meta_value` = meta_value WHERE `etapa_data`.`etapa_id` = etapa_id AND `etapa_data`.`meta_key`= meta_key;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa_opcion` (IN `etapa_id` INT, IN `pMetaKey` VARCHAR(510), IN `pMetaValue` VARCHAR(510), IN `imagen` LONGBLOB)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `edit_etapa_opcion` (IN `etapa_id` INT, IN `pMetaKey` VARCHAR(510), IN `pMetaValue` VARCHAR(510), IN `imagen` LONGBLOB)   BEGIN
 
 UPDATE `etapa_opcion`
 SET `meta_value` = pMetaValue, etapa_opcion.imagen= imagen
@@ -187,53 +178,53 @@ AND `etapa_opcion`.`meta_key` = pMetaKey;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `existEmail` (IN `email` VARCHAR(255))  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `existEmail` (IN `email` VARCHAR(255))   BEGIN 
 	SELECT count(*) 
     FROM usuarios u
     WHERE u.mail = email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `existUserInUsersTable` (IN `email` VARCHAR(255))  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `existUserInUsersTable` (IN `email` VARCHAR(255))   BEGIN 
 	SELECT count(mail) 
     FROM usuarios
     WHERE mail=email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `exist_user_entidad` (IN `email` VARCHAR(510), IN `entidad` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `exist_user_entidad` (IN `email` VARCHAR(510), IN `entidad` VARCHAR(510))   BEGIN
 SELECT COUNT(*)
 FROM users_to_entites ue
 WHERE ue.user_email=email AND ue.entity_id=entidad;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `exist_usuario` (IN `email` VARCHAR(255), IN `pasw` VARCHAR(255))  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `exist_usuario` (IN `email` VARCHAR(255), IN `pasw` VARCHAR(255))   BEGIN 
 	SELECT count(mail) 
     FROM usuarios
     WHERE mail=email AND  pass=pasw;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getAllStagesOfUser` (IN `email` VARCHAR(255), IN `id` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getAllStagesOfUser` (IN `email` VARCHAR(255), IN `id` INT)   BEGIN
 SELECT * FROM users u, users_to_calculators utc, calculators c, etapa e WHERE u.mail=utc.user_email AND utc.calculator_token=c.token AND c.token=e.token AND u.mail=email AND etapa.id= id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcFormula` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcFormula` (IN `token` VARCHAR(255))   BEGIN
 	SELECT c.formula
 FROM calculators c 
 WHERE c.token=token;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcsInfo` (IN `mail` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcsInfo` (IN `mail` VARCHAR(255))   BEGIN
 	SELECT c.name, c.url, c.ip, c.formula, c.entity_ID, c.name, c.activo, c.token
 FROM usuarios u, calculators c, users_to_calculators utc
 WHERE u.mail=utc.user_email AND c.activo=1 AND utc.calculator_token=c.token AND u.mail=mail;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcsOfUser` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcsOfUser` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))   BEGIN
 	SELECT GROUP_CONCAT(DISTINCT c.name)
 FROM users u, calculators c, users_to_calculators utc
 WHERE u.mail=utc.user_email AND c.activo=1 AND utc.calculator_token=c.token AND u.mail=mail;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcStagesId` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getCalcStagesId` (IN `token` VARCHAR(255))   BEGIN
 
 SELECT e.id
 FROM etapa e
@@ -241,7 +232,7 @@ WHERE e.token=token;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getClientEmailOcurrences` (IN `email` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getClientEmailOcurrences` (IN `email` VARCHAR(510))   BEGIN
 
 SELECT COUNT(*)
 FROM clientes cli
@@ -249,7 +240,7 @@ WHERE cli.email=email;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getClientsCount` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getClientsCount` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))   BEGIN
 	SELECT COUNT(DISTINCT ibc.email_cliente)
     FROM calculadoras_presupuestos_clientes ibc
     WHERE ibc.token IN (
@@ -259,20 +250,20 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getClientsCount` (IN `mail` 
     );
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getOpcion` (IN `identificador` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getOpcion` (IN `identificador` INT)   BEGIN
 SELECT *
 FROM etapa_opcion o
 WHERE o.id= identificador OR o.id= identificador+1 OR o.id= identificador+2;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getOpciones` (IN `identificador` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getOpciones` (IN `identificador` INT)   BEGIN
 SELECT *
 FROM etapa_opcion o
 WHERE o.etapa_id= identificador
 ORDER BY o.id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getQueriesCount` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getQueriesCount` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))   BEGIN
 	SELECT count(*)
     FROM calculadoras_presupuestos_clientes ibc
     WHERE ibc.token IN (
@@ -282,42 +273,42 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getQueriesCount` (IN `mail` 
     );
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getSpecificCalculatorInfo` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getSpecificCalculatorInfo` (IN `token` VARCHAR(255))   BEGIN
 	SELECT c.name, c.url, c.ip, c.formula, c.entity_ID, c.name, c.activo, c.token
 FROM usuarios u, calculators c, users_to_calculators utc
 WHERE u.mail=utc.user_email AND c.activo=1 AND utc.calculator_token=c.token AND c.token=token;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageGeneralInfo` (IN `id` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageGeneralInfo` (IN `id` INT)   BEGIN
 SELECT * FROM etapa e WHERE e.id=id;	
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageInfo` (IN `id` INT)  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageInfo` (IN `id` INT)   BEGIN 
 
 SELECT ed.* FROM etapa e, etapa_data ed WHERE e.id=id AND e.id=ed.etapa_id;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageInsertedValue` (IN `p_etapa_id` INT, IN `n_presupuesto` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageInsertedValue` (IN `p_etapa_id` INT, IN `n_presupuesto` INT)   BEGIN
 
 SELECT meta_value FROM presupuestos_data WHERE etapa_id= p_etapa_id AND presupuesto_id= n_presupuesto;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStagesGeneralInfo` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStagesGeneralInfo` (IN `token` VARCHAR(255))   BEGIN
     SELECT *
     FROM etapa e
     WHERE e.token= token
     ORDER BY e.posicion ASC;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageType` (IN `identificador` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getStageType` (IN `identificador` INT)   BEGIN
 SELECT tipo
 FROM etapa e
 WHERE e.id= identificador;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getTeamMates` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getTeamMates` (IN `mail` VARCHAR(255), OUT `result` VARCHAR(255))   BEGIN
 	SELECT count(DISTINCT u.user_email)
     FROM users_to_calculators u
     WHERE u.user_email IN(
@@ -331,7 +322,7 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getTeamMates` (IN `mail` VAR
     );
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getTipoEtapa` (IN `p_posicion` INT)  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getTipoEtapa` (IN `p_posicion` INT)   BEGIN 
 
 SELECT e.tipo
 FROM etapa e
@@ -339,36 +330,36 @@ WHERE e.posicion=p_posicion;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getUserEntities` (IN `mail` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `getUserEntities` (IN `mail` VARCHAR(255))   BEGIN
 	SELECT e.nombre, e.telefono, e.direccion, e.type, e.descripcion, e.ID
 FROM usuarios u, entities e, users_to_entites ue
 WHERE u.mail=mail AND ue.user_email=u.mail AND ue.entity_id=e.ID AND e.activo=1;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_all_users` ()  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_all_users` ()   BEGIN
 SELECT *
 FROM users;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_entidad` (IN `id` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_entidad` (IN `id` VARCHAR(255))   BEGIN
 SELECT *
 FROM entities e
 WHERE e.ID=id;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_etapa_actual` (IN `prueba` VARCHAR(255), IN `posicion` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_etapa_actual` (IN `prueba` VARCHAR(255), IN `posicion` VARCHAR(255))   BEGIN
 SELECT * 
 FROM etapa e
 WHERE e.token=prueba AND e.posicion= posicion-1;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_id_de_posicion` (IN `url` VARCHAR(5100), IN `posicion` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_id_de_posicion` (IN `url` VARCHAR(5100), IN `posicion` INT)   BEGIN
 SELECT e.id
 FROM etapa e, calculators c
 WHERE c.url=url AND c.token= e.token AND e.posicion=posicion;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_monthly_average` (IN `p_etapa_id` INT, IN `n_presupuesto` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_monthly_average` (IN `p_etapa_id` INT, IN `n_presupuesto` INT)   BEGIN
     SELECT presupuestos_data.meta_value
     FROM presupuestos_data
     JOIN etapa ON etapa.id = presupuestos_data.etapa_id
@@ -377,7 +368,7 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_monthly_average` (IN `p_
         AND etapa.titulo LIKE '%UTE%';
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_calculadora` (IN `token` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_calculadora` (IN `token` VARCHAR(510))   BEGIN
 
 SELECT p.id, p.resultado, p.formula, p.finalizado, cli.email, cli.telephone, cli.name, cpc.fecha
 FROM calculators c, calculadoras_presupuestos_clientes cpc, presupuestos p, clientes cli
@@ -385,7 +376,7 @@ WHERE c.token=token AND cpc.presupuestos_id=p.id AND cpc.email_cliente=cli.email
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_calculadoras_nombre` (IN `email` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_calculadoras_nombre` (IN `email` VARCHAR(510))   BEGIN
 
 SELECT DISTINCT c.name, c.token
 FROM usuarios u, users_to_entites ue, entities e, entidades_calculadoras ec, calculators c, calculadoras_presupuestos_clientes cpc, presupuestos p, clientes cli
@@ -393,7 +384,7 @@ WHERE u.mail=email AND u.mail=ue.user_email AND ue.entity_id=e.ID AND ue.entity_
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_email` (IN `email` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_email` (IN `email` VARCHAR(510))   BEGIN
 
 SELECT c.name, cpc.fecha, cli.email, cli.telephone, cli.name, p.finalizado, p.resultado
 FROM usuarios u, users_to_entites ue, entities e, entidades_calculadoras ec, calculators c, calculadoras_presupuestos_clientes cpc, presupuestos p, clientes cli
@@ -401,7 +392,7 @@ WHERE u.mail=email AND u.mail=ue.user_email AND ue.entity_id=e.ID AND ue.entity_
 ORDER BY cpc.fecha DESC;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_entidad` (IN `entidad_id` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_presupuestos_entidad` (IN `entidad_id` VARCHAR(255))   BEGIN
 
 SELECT p.id, e.nombre, c.name,  p.resultado, p.formula, p.finalizado, cli.email, cli.telephone, cli.name, cpc.fecha
 FROM entities e, entidades_calculadoras ec, calculators c, calculadoras_presupuestos_clientes cpc, presupuestos p, clientes cli
@@ -409,7 +400,7 @@ WHERE entidad_id = e.ID AND ec.id_entidad=e.ID AND ec.token=cpc.token AND cpc.pr
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_sum_presupuestos_data` (IN `presupuesto_id` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_sum_presupuestos_data` (IN `presupuesto_id` INT)   BEGIN
 
 SET @resultado := (SELECT SUM(meta_value)
 FROM presupuestos_data
@@ -422,7 +413,7 @@ UPDATE `presupuestos` SET `resultado` = @resultado WHERE `presupuestos`.`id` = p
 SELECT @resultado;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_ultima_etapa_posicion` (IN `url` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_ultima_etapa_posicion` (IN `url` VARCHAR(510))   BEGIN
 
 SELECT MAX(e.posicion)
 FROM etapa e, calculators c
@@ -431,29 +422,35 @@ AND e.token = c.token;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_user` (IN `email` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_user` (IN `email` VARCHAR(255))   BEGIN
     SELECT u.email, u.completeName, u.lastAccess, u.telephone, u.isActive, u.profilePhoto
     FROM users u 
     WHERE u.email=email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_usuario` (IN `email` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_usuario` (IN `email` VARCHAR(255))   BEGIN
 SELECT u.telefono, u.nombre, u.apellidos
 FROM usuarios u WHERE u.mail=email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_usuarios_entidad` (IN `entidad_id` VARCHAR(510), IN `email` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `get_usuarios_entidad` (IN `entidad_id` VARCHAR(510), IN `email` VARCHAR(510))   BEGIN
 SELECT ue.user_email, ue.entity_id, u.nombre, u.apellidos
 FROM usuarios u, users_to_entites ue WHERE ue.entity_id= entidad_id AND ue.user_email!=email AND u.mail=ue.user_email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_client` (IN `email_cliente` VARCHAR(510), IN `name_cliente` VARCHAR(510), IN `telefono_cliente` VARCHAR(510))  BEGIN
+CREATE DEFINER=`root`@`%` PROCEDURE `get_usuario_pass` (IN `email_param` VARCHAR(255))   BEGIN
+    SELECT pass
+    FROM usuarios
+    WHERE mail = email_param;
+END$$
+
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_client` (IN `email_cliente` VARCHAR(510), IN `name_cliente` VARCHAR(510), IN `telefono_cliente` VARCHAR(510))   BEGIN
 
 INSERT INTO `clientes` (`email`, `name`, `telephone`) VALUES (email_cliente, name_cliente, telefono_cliente);
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa` (IN `token` VARCHAR(255), IN `tipo` VARCHAR(255), IN `titulo` VARCHAR(255), IN `subtitulo` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa` (IN `token` VARCHAR(255), IN `tipo` VARCHAR(255), IN `titulo` VARCHAR(255), IN `subtitulo` VARCHAR(255))   BEGIN
 
 SET @posicion = 0;
 
@@ -465,56 +462,56 @@ SELECT LAST_INSERT_ID();
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510), IN `meta_value` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa_data` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510), IN `meta_value` VARCHAR(510))   BEGIN
 INSERT INTO `etapa_data` (`etapa_id`, `meta_key`, `meta_value`) VALUES (etapa_id, meta_key, meta_value);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa_opcion` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510), IN `meta_value` VARCHAR(510), IN `imagen` LONGBLOB)  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_etapa_opcion` (IN `etapa_id` INT, IN `meta_key` VARCHAR(510), IN `meta_value` VARCHAR(510), IN `imagen` LONGBLOB)   BEGIN 
 INSERT INTO `etapa_opcion` (`etapa_id`, `meta_key`, `meta_value`, `imagen`) VALUES ( etapa_id, meta_key, meta_value, imagen);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_log` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_log` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))   BEGIN
     INSERT INTO logs (`date`, `time`, `procedure`, `in`, `out`)
     VALUES (p_date, p_time, p_procedure, p_in, p_out);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_movement` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_movement` (IN `p_date` VARCHAR(20), IN `p_time` VARCHAR(8), IN `p_procedure` VARCHAR(255), IN `p_in` VARCHAR(1000), IN `p_out` VARCHAR(1000))   BEGIN
 INSERT INTO `logs` (`date`, `time`, `procedure`, `in`, `out`) VALUES (p_date, p_time, p_procedure, p_in, p_out);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_presupuesto_data` (IN `presupuesto_id` INT, IN `etapa_id` INT, IN `meta_key` VARCHAR(255), IN `meta_value` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_presupuesto_data` (IN `presupuesto_id` INT, IN `etapa_id` INT, IN `meta_key` VARCHAR(255), IN `meta_value` VARCHAR(255))   BEGIN
 
 INSERT INTO `presupuestos_data` (`id`, `presupuesto_id`, `meta_key`, `meta_value`, `etapa_id`) VALUES (NULL, presupuesto_id, meta_key, meta_value, etapa_id);
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_user` (IN `email` VARCHAR(255), IN `pwd` VARCHAR(255), IN `telephone` INT(20), IN `completeName` VARCHAR(255), IN `lastAccess` DATE, IN `isActive` TINYINT, IN `profilePhoto` LONGBLOB)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_user` (IN `email` VARCHAR(255), IN `pwd` VARCHAR(255), IN `telephone` INT(20), IN `completeName` VARCHAR(255), IN `lastAccess` DATE, IN `isActive` TINYINT, IN `profilePhoto` LONGBLOB)   BEGIN
 INSERT INTO `users` (`email`, `pwd`, `telephone`, `completeName`, `lastAccess`, `isActive`, `profilePhoto`) VALUES ( email, pwd, telephone, completeName, lastAccess, isActive, profilephoto);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_usuario` (IN `email` VARCHAR(255), IN `pass` VARCHAR(255), IN `nombre` VARCHAR(255), IN `ultimoAcceso` VARCHAR(255), IN `ip` VARCHAR(255), IN `apellidos` VARCHAR(255), IN `imagen` LONGBLOB)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `insert_usuario` (IN `email` VARCHAR(255), IN `pass` VARCHAR(255), IN `nombre` VARCHAR(255), IN `ultimoAcceso` VARCHAR(255), IN `ip` VARCHAR(255), IN `apellidos` VARCHAR(255), IN `imagen` LONGBLOB)   BEGIN
 INSERT INTO `usuarios` (`mail`, `pass`, `telefono`, `nombre`, `ultimoAcceso`, `ultimaIP`, `apellidos`, `activo`, `imagen`) VALUES (email, pass, NULL, nombre, ultimoAcceso, ip, apellidos, '1', imagen);
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `is_user_logged` (IN `email` VARCHAR(255), IN `pasw` VARCHAR(255))  BEGIN 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `is_user_logged` (IN `email` VARCHAR(255), IN `pasw` VARCHAR(255))   BEGIN 
 	SELECT count(email) 
     FROM users u
     WHERE u.email=email AND u.pwd=pasw;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `nextStagePosition` (IN `token` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `nextStagePosition` (IN `token` VARCHAR(255))   BEGIN
 SELECT max(Position)+1
 FROM stages
 WHERE token_calculator=token;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `n_dominio_cal` (IN `url` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `n_dominio_cal` (IN `url` VARCHAR(510))   BEGIN
 SELECT COUNT(*)
 FROM calculators c
 WHERE c.url=url;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `select_calc_by_url` (IN `url` VARCHAR(5100))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `select_calc_by_url` (IN `url` VARCHAR(5100))   BEGIN
 
 SELECT c.token, c.formula
 FROM calculators c
@@ -522,29 +519,29 @@ WHERE c.url=url;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `token_disponible` (IN `token` VARCHAR(510))  SELECT count(*)
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `token_disponible` (IN `token` VARCHAR(510))   SELECT count(*)
 FROM tokens t
 WHERE t.vendido=1 AND t.canjeado=0 AND t.token=token$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `updateFormula` (IN `token` VARCHAR(255), IN `formula` VARCHAR(5100))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `updateFormula` (IN `token` VARCHAR(255), IN `formula` VARCHAR(5100))   BEGIN
 UPDATE `calculators` SET `formula` = formula WHERE `calculators`.`token` = token;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `update_presupuesto_resultado` (IN `resultado` INT, IN `n_presupuesto` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `update_presupuesto_resultado` (IN `resultado` INT, IN `n_presupuesto` INT)   BEGIN
 
 UPDATE `presupuestos` SET `resultado` = resultado WHERE `presupuestos`.`id` = n_presupuesto;
 
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `update_user` (IN `email` VARCHAR(255), IN `pwd` VARCHAR(255), IN `telephone` VARCHAR(255), IN `completeName` VARCHAR(255), IN `lastAccess` DATE, IN `isActive` BOOLEAN, IN `profilePhoto` LONGBLOB)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `update_user` (IN `email` VARCHAR(255), IN `pwd` VARCHAR(255), IN `telephone` VARCHAR(255), IN `completeName` VARCHAR(255), IN `lastAccess` DATE, IN `isActive` BOOLEAN, IN `profilePhoto` LONGBLOB)   BEGIN
 UPDATE users u
 SET u.email= email, u.pwd= pwd, u.telephone= telephone, u.completeName= completeName, u.lastAccess= lastAccess, u.isActive= isActive, u.profilePhoto= profilePhoto WHERE `email` = email;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `verficar_vista` (IN `url` VARCHAR(5100))  SELECT COUNT(*) FROM calculators c, tokens t 
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `verficar_vista` (IN `url` VARCHAR(5100))   SELECT COUNT(*) FROM calculators c, tokens t 
 WHERE c.token=t.token AND c.url=url AND c.activo=1 AND t.fechaFin>now() AND t.vendido=1 AND t.canjeado=1$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `verifyIfTokenExists` (IN `pToken` VARCHAR(255))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `verifyIfTokenExists` (IN `pToken` VARCHAR(255))   BEGIN
 	SELECT count(*)
     FROM tokens t
     WHERE t.token = pToken
@@ -552,13 +549,13 @@ CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `verifyIfTokenExists` (IN `pT
     AND t.vendido = 1;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `vista_calculadora_n_etapas` (IN `url` VARCHAR(510))  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `vista_calculadora_n_etapas` (IN `url` VARCHAR(510))   BEGIN
 SELECT COUNT(*)
 FROM calculators c, etapa e
 WHERE c.url=url AND c.token=e.token;
 END$$
 
-CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `vista_etapa_opciones_n_opciones` (IN `id` INT)  BEGIN
+CREATE DEFINER=`minervatech`@`localhost` PROCEDURE `vista_etapa_opciones_n_opciones` (IN `id` INT)   BEGIN
 
 SELECT COUNT(*)/3
 FROM etapa_opcion eo
@@ -1150,7 +1147,7 @@ INSERT INTO `clientes` (`email`, `name`, `telephone`) VALUES
 CREATE TABLE `entidades_calculadoras` (
   `id_entidad` varchar(510) NOT NULL,
   `token` varchar(510) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `entidades_calculadoras`
@@ -1240,7 +1237,7 @@ CREATE TABLE `etapa` (
   `titulo` varchar(255) NOT NULL,
   `subtitulo` varchar(255) NOT NULL,
   `posicion` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `etapa`
@@ -1271,7 +1268,7 @@ CREATE TABLE `etapa_data` (
   `meta_key` varchar(2550) NOT NULL,
   `meta_value` varchar(2550) NOT NULL,
   `imagen` longblob DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `etapa_data`
@@ -1315,7 +1312,7 @@ CREATE TABLE `etapa_opcion` (
   `meta_key` varchar(2550) NOT NULL,
   `meta_value` varchar(2550) NOT NULL,
   `imagen` longblob DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `etapa_opcion`
@@ -1369,7 +1366,7 @@ CREATE TABLE `logs` (
   `procedure` varchar(255) NOT NULL,
   `in` varchar(10000) NOT NULL,
   `out` varchar(10000) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `logs`
@@ -2372,7 +2369,7 @@ CREATE TABLE `presupuestos_data` (
   `meta_key` varchar(2550) NOT NULL,
   `meta_value` varchar(2550) NOT NULL,
   `etapa_id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `presupuestos_data`
@@ -3336,7 +3333,7 @@ CREATE TABLE `tokens` (
   `vendido` tinyint(1) NOT NULL,
   `canjeado` tinyint(1) NOT NULL,
   `fechaFin` date NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Volcado de datos para la tabla `tokens`
@@ -3516,12 +3513,11 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`mail`, `pass`, `telefono`, `nombre`, `ultimoAcceso`, `ultimaIP`, `apellidos`, `activo`, `imagen`) VALUES
-('a@a.a', '111', NULL, 'AAAA', '2023-05-03', '0.0.0.0', '', 1, ''),
-('gabriela.perez@estudiantes.utec.edu.uy', '123', '123456', 'Gabita', '2023-11-13', '0.0.0.0', 'Perez', 1, ''),
-('gabriela.perezcaviglia@gmail.com', '123', NULL, 'Gabriela', '2023-10-27', '0.0.0.0', '', 1, ''),
-('minervatechuy252000@gmail.com', '123', NULL, 'Minerva', '2023-05-02', '0.0.0.0', '', 1, ''),
-('prueba@minervatech.uy', '123', NULL, 'Prueba', '2023-05-05', '0.0.0.0', '', 1, ''),
-('usuario@pruebas.com', '123', NULL, 'user', '2023-10-15', '0.0.0.0', '', 1, '');
+('gabriela.perez@estudiantes.utec.edu.uy', 'gAAAAABldkvp-8V0AcRXXqzCNLJdKzKFJeWsLNvuzHSmfHjweaC4q67aFaNfbUJh-slB6mxZ0jRgqFH7cWMvU5WfR33R4pL2kw==', '123456', 'Gabita', '2023-11-13', '0.0.0.0', 'Perez', 1, ''),
+('gabriela.perezcaviglia@gmail.com', 'gAAAAABldkvp-8V0AcRXXqzCNLJdKzKFJeWsLNvuzHSmfHjweaC4q67aFaNfbUJh-slB6mxZ0jRgqFH7cWMvU5WfR33R4pL2kw==', NULL, 'Gabriela', '2023-10-27', '0.0.0.0', '', 1, ''),
+('minervatechuy252000@gmail.com', 'gAAAAABldkvp-8V0AcRXXqzCNLJdKzKFJeWsLNvuzHSmfHjweaC4q67aFaNfbUJh-slB6mxZ0jRgqFH7cWMvU5WfR33R4pL2kw==', NULL, 'Minerva', '2023-05-02', '0.0.0.0', '', 1, ''),
+('prueba@minervatech.uy', 'gAAAAABldkvp-8V0AcRXXqzCNLJdKzKFJeWsLNvuzHSmfHjweaC4q67aFaNfbUJh-slB6mxZ0jRgqFH7cWMvU5WfR33R4pL2kw==', NULL, 'Prueba', '2023-05-05', '0.0.0.0', '', 1, ''),
+('usuario@pruebas.com', 'gAAAAABldkvp-8V0AcRXXqzCNLJdKzKFJeWsLNvuzHSmfHjweaC4q67aFaNfbUJh-slB6mxZ0jRgqFH7cWMvU5WfR33R4pL2kw==', NULL, 'user', '2023-10-15', '0.0.0.0', '', 1, '');
 
 --
 -- Índices para tablas volcadas
