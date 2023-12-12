@@ -1930,10 +1930,10 @@ def comprar_token():
 # ---------------------------------------------------------------------------------
 # Actualiza la formula de una determinada calculadora
 #@app.route('/prueba', methods=['POST'], endpoint='prueba')
-@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>/<tipo_sig>')
-@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>')
-@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>')
-@app.route('/show_etapa/<posicion>/<direccion_url>/')
+@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>/<tipo_sig>', methods=['GET', 'OPTIONS'])
+@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>', methods=['GET', 'OPTIONS'])
+@app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>', methods=['GET', 'OPTIONS'])
+@app.route('/show_etapa/<posicion>/<direccion_url>/', methods=['GET', 'OPTIONS'])
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
     #url= request.environ['HTTP_ORIGIN']
@@ -1956,9 +1956,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     if verficar_vista!=1: 
         writeLog("FALLA 1875", "", "", "url_context", "usuario_context", "debug_context")
         response = render_template("error.html")
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
     
     # Se verifica que la calculadora tiene etapas
@@ -1966,9 +1967,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     if verficar_vista==0: 
         writeLog("FALLA 1881", "", "", "url_context", "usuario_context", "debug_context")
         response = render_template("error.html")
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
     posicion= int(posicion)
@@ -1976,9 +1978,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     # La posicion 0 no se contempla en el sistema por lo que de llegar se muestra la vista de error
     if posicion==0: 
         response = render_template("inicio.html", funcion_sig=funcion_sig, posicion=posicion)
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
     
     # Si la posicion es 1 se crea un nuevo presupuesto y se almacena su id
@@ -2029,13 +2032,15 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
             response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
             response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            response.headers['Access-Control-Allow-Credentials'] = 'true'
             return response
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])
         home_url= request.environ['HTTP_ORIGIN']
         response = render_template("etapaFinal.html", resultado=resultado_final, resultado_mes=resultado_mes, promedio_mensual=promedio_mensual, url=home_url)
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
     # Se obtiene el id de la url y la posicion actual
@@ -2079,9 +2084,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         response = render_template("intervalos.html", funcion_sig=funcion_sig, posicion=posicion,
                             n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, **meta_values)
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         response = response
 
     elif tipo== "Cualificada": #Opciones
@@ -2092,9 +2098,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         if vista_etapa_opciones_n_opciones==0:
             writeLog("FALLA 1953", "", "", "url_context", "usuario_context", "debug_context")
             response = render_template("error.html")
-            response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+            response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
             response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            response.headers['Access-Control-Allow-Credentials'] = 'true'
             return response
 
         stage_specific_info= functionsDB.doStoredProcedure("getOpciones", args)[0]
@@ -2109,9 +2116,10 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         #writeLog('vista_Opciones', args, new_options, "url_context", "usuario_context", "debug_context")
         response = render_template("opciones.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, opciones=new_options)
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         return response
 
     elif tipo== "Geografica":
@@ -2125,15 +2133,16 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
         writeLog('vista_Geografica', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
         writeLog('posicion', posicion, "", "url_context", "usuario_context", "debug_context")
         response = render_template("geografica.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, direccion=direccion, zoom=zoom, latitud=latitud, longitud=longitud)
-        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
         return response
     
     response = render_template("etapaFinal.html",pos_actual=pos_actual)
-    response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+    response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
     response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
 
 def generar_presupuesto(formula, token, n_presupuesto):
