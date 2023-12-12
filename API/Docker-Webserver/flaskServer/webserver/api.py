@@ -12,7 +12,13 @@ import base64
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app,
+    resources={
+        r"/*": {
+            "origins": ["https://www.cloud.minervatech.uy", "https://www.api.cloud.minervatech.uy"],
+            "methods": ["POST", "OPTIONS"]
+        }
+    })  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
@@ -1936,8 +1942,8 @@ def comprar_token():
 @app.route('/show_etapa/<posicion>/<direccion_url>/')
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
-    url= request.environ['HTTP_ORIGIN']
-    #url= direccion_url.replace("!", "/")
+    #url= request.environ['HTTP_ORIGIN']
+    url= direccion_url.replace("!", "/")
     writeLog("PRUEBA DE URL", url, "", "url_context", "usuario_context", "debug_context")
     pos_actual= int(posicion)-1
     
