@@ -10,8 +10,6 @@ import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
-# Para aumentar el tamaño máximo de mensaje de solicitud
-app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 CORS(app, resources={r"/show_etapa/*": {"origins": "https://www.cloud.minervatech.uy"}})
 
 # Definición de las funciones por caso de uso
