@@ -79,7 +79,7 @@ function destacar(btn, tipo, nombreDiv, inputEtapa) {
 }
 
 function logInformation(apiurl, n_presupuesto) {
-    var logWebhookUrl = 'api.cloud.minervatech.uy/insert_logs';
+    var logWebhookUrl = 'https://api.cloud.minervatech.uy/insert_logs';
     var direccionAutocomplete = document.getElementById('autocomplete').value;
     var direccionHidden = document.getElementById('direccion').value;
     var direccion = direccionAutocomplete ? direccionAutocomplete : direccionHidden;
