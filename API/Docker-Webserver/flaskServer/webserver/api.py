@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-# from flask_cors import CORS  # Para que se permita la política CORS
+from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
