@@ -12,7 +12,7 @@ import base64
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Definición de las funciones por caso de uso
 
