@@ -13,6 +13,7 @@ app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Definición de las funciones por caso de uso
 
