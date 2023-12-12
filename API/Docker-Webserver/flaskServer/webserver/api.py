@@ -10,19 +10,17 @@ import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
-# Para aumentar el tamaño máximo de mensaje de solicitud
-app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-CORS(app, resources={r"/*": {"origins": "*"}})
-app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# Definición de las funciones por caso de uso
-
-@app.route('/', methods=['GET']) 
-def index():
-    return jsonify({'Autor': 'MinervaTech',
-                    'Nombre': 'API Simulador',
-                    'Descripción': 'Trabajo final UTEC'}
-                    )
+# Add the route for handling preflight requests
+@app.route('/', methods=['OPTIONS'])
+def handle_preflight():
+    response = jsonify()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 
 # USUARIO 
