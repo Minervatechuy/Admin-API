@@ -29,7 +29,6 @@ function APIrequest(sig_pos) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', apiurl, true);
         xhr.withCredentials = true; // Enable credentials (cookies, authorization headers, etc.)
-        xhr.crossOrigin = true; // Set the crossOrigin property to ensure the browser sends CORS headers
     
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
