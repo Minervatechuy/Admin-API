@@ -1936,8 +1936,8 @@ def comprar_token():
 @app.route('/show_etapa/<posicion>/<direccion_url>/')
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
-    #url= request.environ['HTTP_ORIGIN']
-    url= direccion_url.replace("!", "/")
+    url= request.environ['HTTP_ORIGIN']
+    #url= direccion_url.replace("!", "/")
     writeLog("PRUEBA DE URL", url, "", "url_context", "usuario_context", "debug_context")
     pos_actual= int(posicion)-1
     
