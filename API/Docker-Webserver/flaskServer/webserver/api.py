@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-from flask_cors import CORS  # Para que se permita la política CORS
+from flask_cors import CORS, cross_origin  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
@@ -1931,9 +1931,13 @@ def comprar_token():
 # Actualiza la formula de una determinada calculadora
 #@app.route('/prueba', methods=['POST'], endpoint='prueba')
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>/<tipo_sig>')
+@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>')
+@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>')
+@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/')
+@cross_origin()
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
     #url= request.environ['HTTP_ORIGIN']
