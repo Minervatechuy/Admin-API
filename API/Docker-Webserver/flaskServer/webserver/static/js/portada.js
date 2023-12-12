@@ -29,7 +29,7 @@ function APIrequest(sig_pos) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', apiurl, true);
         xhr.setRequestHeader('Access-Control-Allow-Headers', '*');
-        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        xhr.setRequestHeader('Access-Control-Allow-Methods', '*');
         xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
