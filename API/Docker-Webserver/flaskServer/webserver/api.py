@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, render_template, request, json
+from flask import Flask, jsonify, render_template, request, json, Response
 from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
@@ -1953,7 +1953,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     writeLog(verficar_vista, "", "", "url_context", "usuario_context", "debug_context")
     if verficar_vista!=1: 
         writeLog("FALLA 1875", "", "", "url_context", "usuario_context", "debug_context")
-        response = render_template("error.html")
+        response = Response(render_template("error.html"))
         response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
@@ -1964,7 +1964,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     verficar_vista= functionsDB.doStoredProcedure("vista_calculadora_n_etapas", [url])[0][0][0]
     if verficar_vista==0: 
         writeLog("FALLA 1881", "", "", "url_context", "usuario_context", "debug_context")
-        response = render_template("error.html")
+        response = Response(render_template("error.html"))
         response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
         response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
@@ -2021,7 +2021,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
             writeLog("resultado_mes", f"resultado_mes: {resultado_mes}", "", "", "", True)
             writeLog("promedio_mensual", f"promedio_mensual: {promedio_mensual}", "", "", "", True)
         except RuntimeError:
-            response = render_template("error.html")
+            response = Response(render_template("error.html"))
             response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
             response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
@@ -2080,7 +2080,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         if vista_etapa_opciones_n_opciones==0:
             writeLog("FALLA 1953", "", "", "url_context", "usuario_context", "debug_context")
-            response = render_template("error.html")
+            response = Response(render_template("error.html"))
             response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
             response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
