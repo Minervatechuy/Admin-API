@@ -2,7 +2,6 @@ var placeSearch, autocomplete;
 
 function initAutocomplete() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.cloud.minervatech.uy', true);
     autocomplete = new google.maps.places.Autocomplete(
         /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
         {types: ['geocode']});
