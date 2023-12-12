@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-from flask_cors import CORS  # Para que se permita la política CORS
+# from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
@@ -10,7 +10,7 @@ import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
-CORS(app, resources={r"/*": {"origins": "https://www.cloud.minervatech.uy", "supports_credentials": True}})
+""" CORS(app, resources={r"/*": {"origins": "https://www.cloud.minervatech.uy", "supports_credentials": True}})
 
 # Add the route for handling preflight requests
 @app.route('/', methods=['OPTIONS'])
@@ -20,7 +20,7 @@ def handle_preflight():
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
+    return response """
 
 
 # USUARIO 
