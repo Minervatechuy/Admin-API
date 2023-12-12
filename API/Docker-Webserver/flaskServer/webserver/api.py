@@ -12,16 +12,9 @@ import base64
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app, support_credentials=True)
 
 # Definición de las funciones por caso de uso
-
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return response
 
 @app.route('/', methods=['GET']) 
 def index():
@@ -1938,13 +1931,13 @@ def comprar_token():
 # Actualiza la formula de una determinada calculadora
 #@app.route('/prueba', methods=['POST'], endpoint='prueba')
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>/<tipo_sig>')
-@cross_origin()
+@cross_origin(supports_credentials=True)
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>')
-@cross_origin()
+@cross_origin(supports_credentials=True)
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>')
-@cross_origin()
+@cross_origin(supports_credentials=True)
 @app.route('/show_etapa/<posicion>/<direccion_url>/')
-@cross_origin()
+@cross_origin(supports_credentials=True)
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
     #url= request.environ['HTTP_ORIGIN']
