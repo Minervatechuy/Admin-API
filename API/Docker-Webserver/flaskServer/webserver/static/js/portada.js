@@ -28,6 +28,7 @@ function APIrequest(sig_pos) {
     if (XMLHttpRequest) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', apiurl, true);
+        xhr.withCredentials = true;
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var response = xhr.responseText;
