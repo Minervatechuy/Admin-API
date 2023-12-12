@@ -10,8 +10,7 @@ import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
-allowed_origins = ["https://www.cloud.minervatech.uy"]
-CORS(app, resources={r"/*": {"origins": allowed_origins}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "https://www.cloud.minervatech.uy", "supports_credentials": True}})
 
 # Add the route for handling preflight requests
 @app.route('/', methods=['OPTIONS'])
