@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, render_template, request, json, Response
+from flask import Flask, jsonify, render_template, request, json
 from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
@@ -10,7 +10,9 @@ import base64
 
 
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
-CORS(app, resources={r"/show_etapa/*": {"origins": "https://www.cloud.minervatech.uy"}})
+# Para aumentar el tamaño máximo de mensaje de solicitud
+app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
+CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
@@ -1951,23 +1953,13 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     writeLog(verficar_vista, "", "", "url_context", "usuario_context", "debug_context")
     if verficar_vista!=1: 
         writeLog("FALLA 1875", "", "", "url_context", "usuario_context", "debug_context")
-        response = Response(render_template("error.html"))
-        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        return response
+        return render_template("error.html")
     
     # Se verifica que la calculadora tiene etapas
     verficar_vista= functionsDB.doStoredProcedure("vista_calculadora_n_etapas", [url])[0][0][0]
     if verficar_vista==0: 
         writeLog("FALLA 1881", "", "", "url_context", "usuario_context", "debug_context")
-        response = Response(render_template("error.html"))
-        response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-        response.headers['Access-Control-Allow-Credentials'] = 'true'
-        return response
+        return render_template("error.html")
 
     posicion= int(posicion)
 
@@ -2019,12 +2011,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
             writeLog("resultado_mes", f"resultado_mes: {resultado_mes}", "", "", "", True)
             writeLog("promedio_mensual", f"promedio_mensual: {promedio_mensual}", "", "", "", True)
         except RuntimeError:
-            response = Response(render_template("error.html"))
-            response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
-            response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-            response.headers['Access-Control-Allow-Credentials'] = 'true'
-            return response
+            return render_template("error.html")
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])
         home_url= request.environ['HTTP_ORIGIN']
         return render_template("etapaFinal.html", resultado=resultado_final, resultado_mes=resultado_mes, promedio_mensual=promedio_mensual, url=home_url)
@@ -2078,12 +2065,7 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         if vista_etapa_opciones_n_opciones==0:
             writeLog("FALLA 1953", "", "", "url_context", "usuario_context", "debug_context")
-            response = Response(render_template("error.html"))
-            response.headers['Access-Control-Allow-Origin'] = 'https://www.cloud.minervatech.uy'
-            response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-            response.headers['Access-Control-Allow-Credentials'] = 'true'
-            return response
+            return render_template("error.html")
 
         stage_specific_info= functionsDB.doStoredProcedure("getOpciones", args)[0]
 
