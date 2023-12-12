@@ -1,8 +1,6 @@
 function APIrequest(sig_pos) {
     var direccion_url = encodeURI(window.location.href).replace(/\//g, '!');
-    var apiUrlPath = '/show_etapa/' + sig_pos + '/' + direccion_url;
-
-    var apiurl = new URL(apiUrlPath, 'https://api.cloud.minervatech.uy');
+    var apiurl = 'https://api.cloud.minervatech.uy/show_etapa/' + sig_pos + '/' + direccion_url;
     // Se recogen los valores de la etapa anterior haciendo una especie de isset
     if (document.getElementById("n_presupuesto") !== null &&
         document.getElementById("tipo_ant") !== null &&
