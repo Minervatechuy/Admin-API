@@ -5,7 +5,7 @@
     define ("FAVICONPATH", "../dist/img/logo-white.png");
     define ("LOGOWHITEPATH", "../dist/img/logo-white.png");
     define ("ICONPATH", "../dist/img/icon-logo-white.png");
-    define ("APPPATH", "http://localhost:8172");
+    define ("APPPATH", "https://admin.cloud.minervatech.uy");
 
 
     define ("APIURL", "http://webserver:5000/");
