@@ -15,10 +15,10 @@ app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 CORS(app,
     resources={
         r"/*": {
-            "origins": ["https://www.cloud.minervatech.uy", "https://www.api.cloud.minervatech.uy"],
-            "methods": ["POST", "OPTIONS"]
+            "origins": ["https://www.cloud.minervatech.uy", "https://www.api.cloud.minervatech.uy"]
         }
-    })  # Aplica la política de CORS sobre esta aplicación
+    },
+    methods=["POST", "OPTIONS"])  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
