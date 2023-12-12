@@ -1,5 +1,5 @@
-async function APIrequest(sig_pos) {
-    var direccion_url = encodeURIComponent(window.location.href).replaceAll('/', '!');
+function APIrequest(sig_pos) {
+    var direccion_url = encodeURI(window.location.href).replaceAll('/', '!');
     var apiurl = 'https://api.cloud.minervatech.uy/show_etapa/' + sig_pos + '/' + direccion_url;
 
     // Se recogen los valores de la etapa anterior haciendo una especie de isset
@@ -23,35 +23,35 @@ async function APIrequest(sig_pos) {
         apiurl = apiurl + '/' + n_presupuesto + '/' + tipo + '/' + valor;
     }
 
-    console.log(apiurl);
+    console.log(apiurl)
 
-    try {
-        const response = await fetch(apiurl);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+    if (XMLHttpRequest) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', apiurl, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = xhr.responseText;
 
-        const responseBody = await response.text();
+                if (tipo === 'geografica') {
+                    logInformation(direccion_url, n_presupuesto);
+                }
 
-        if (tipo === 'geografica') {
-            logInformation(direccion_url, n_presupuesto);
-        }
+                var showMap = response.includes('<div id="map"></div>');
 
-        var showMap = responseBody.includes('<div id="map"></div>');
+                document.getElementById('div_response').style.display = showMap ? 'none' : 'block';
+                document.getElementById('div_response_2').style.display = showMap ? 'block' : 'none';
 
-        document.getElementById('div_response').style.display = showMap ? 'none' : 'block';
-        document.getElementById('div_response_2').style.display = showMap ? 'block' : 'none';
-
-        if (showMap) {
-            document.getElementById('div_response_2').innerHTML = responseBody;
-            initMap();
-        } else {
-            document.getElementById('div_response').innerHTML = responseBody;
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
+                if (showMap) {
+                    document.getElementById('div_response_2').innerHTML = response;
+                    initMap();
+                } else {
+                    document.getElementById('div_response').innerHTML = response;
+                }
+            }
+        };
+        xhr.send('');
+    } // Cierra if xmlhttprequest
+} // Cierra la función
 
 function updateSlider(pConsumo) {
     $("valor_ant").val(pConsumo);
@@ -60,23 +60,26 @@ function updateSlider(pConsumo) {
 function destacar(btn, tipo, nombreDiv, inputEtapa) {
     var opciones = $("div#" + nombreDiv + " .opcion");
 
-    // Aplicamos la función anónima para cambiarles el estilo a cada uno de ellos
-    opciones.each(function () {
-        this.style.border = "0px solid white";
-        this.style['-webkit-filter'] = "grayscale(90%)";
-        this.style.opacity = "0.5";
-    });
+    // Aplicamos la función anonima para cambiarles el estilo a cada uno de ellos
+    opciones.each(
+        function () {
+            this.style.border = "0px solid white";
+            this.style['-webkit-filter'] = "grayscale(90%)";
+            this.style.opacity = "0.5";
+
+        } //end función anonima
+    );
 
     // Asignamos el valor al hidden input para luego mandarlo por formulario
     document.getElementById('valor_ant').value = tipo;
 
-    // Resaltamos la opción
+    // Resaltamos la opcion
     btn.style.opacity = "1";
     btn.style['-webkit-filter'] = "grayscale(0%)";
 }
 
-async function logInformation(apiurl, n_presupuesto) {
-    var logWebhookUrl = 'https://api.cloud.minervatech.uy/insert_logs';
+function logInformation(apiurl, n_presupuesto) {
+    var logWebhookUrl = 'api.cloud.minervatech.uy/insert_logs';
     var direccionAutocomplete = document.getElementById('autocomplete').value;
     var direccionHidden = document.getElementById('direccion').value;
     var direccion = direccionAutocomplete ? direccionAutocomplete : direccionHidden;
@@ -88,28 +91,31 @@ async function logInformation(apiurl, n_presupuesto) {
         { name: 'direccion', elementId: 'direccion' },
     ];
 
-    try {
-        for (const variable of variablesToLog) {
-            var element = document.getElementById(variable.elementId);
+    variablesToLog.forEach(function (variable) {
+        var element = document.getElementById(variable.elementId);
 
-            var logData = {
-                procedure: apiurl,
-                presupuesto_id: n_presupuesto,
-                in: variable.name,
-                out: variable.name === 'direccion' ? direccion : element.value,
-            };
+        var logData = {
+            procedure: apiurl,
+            presupuesto_id: n_presupuesto,
+            in: variable.name,
+            out: variable.name === 'direccion' ? direccion : element.value,
+        };
 
-            const logResponse = await fetch(logWebhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(logData),
+        fetch(logWebhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(logData),
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Log Response:', data);
+            })
+            .catch(error => {
+                console.error('Error calling Log :', error);
             });
-
-            console.log('Log Response:', await logResponse.text());
-        }
-    } catch (error) {
-        console.error('Error calling Log:', error);
-    }
+    });
 }
+
+
