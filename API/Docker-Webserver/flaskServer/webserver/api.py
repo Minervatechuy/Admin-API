@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-# from flask_cors import CORS  # Para que se permita la política CORS
+from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
@@ -12,7 +12,7 @@ import base64
 app = Flask(__name__, template_folder="./templates", static_folder='./static')
 # Para aumentar el tamaño máximo de mensaje de solicitud
 app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
-# CORS(app)  # Aplica la política de CORS sobre esta aplicación
+CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
 
@@ -1943,6 +1943,8 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     
     funcion_sig= "APIrequest"
 
+    cors = CORS(app, resources={r"/show_etapa/*": {"origins": "*"}})
+
     '''if tipo_sig==None:
         if tipoSigEtapa(pos_actual+1)=="Geografica":
             funcion_sig= "APIrequest_geo"'''
@@ -1953,19 +1955,31 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
     writeLog(verficar_vista, "", "", "url_context", "usuario_context", "debug_context")
     if verficar_vista!=1: 
         writeLog("FALLA 1875", "", "", "url_context", "usuario_context", "debug_context")
-        return render_template("error.html")
+        response = render_template("error.html")
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
     
     # Se verifica que la calculadora tiene etapas
     verficar_vista= functionsDB.doStoredProcedure("vista_calculadora_n_etapas", [url])[0][0][0]
     if verficar_vista==0: 
         writeLog("FALLA 1881", "", "", "url_context", "usuario_context", "debug_context")
-        return render_template("error.html")
+        response = render_template("error.html")
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
 
     posicion= int(posicion)
 
     # La posicion 0 no se contempla en el sistema por lo que de llegar se muestra la vista de error
     if posicion==0: 
-        return render_template("inicio.html", funcion_sig=funcion_sig, posicion=posicion)
+        response = render_template("inicio.html", funcion_sig=funcion_sig, posicion=posicion)
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
     
     # Si la posicion es 1 se crea un nuevo presupuesto y se almacena su id
     if posicion==1:
@@ -2011,10 +2025,18 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
             writeLog("resultado_mes", f"resultado_mes: {resultado_mes}", "", "", "", True)
             writeLog("promedio_mensual", f"promedio_mensual: {promedio_mensual}", "", "", "", True)
         except RuntimeError:
-            return render_template("error.html")
+            response = render_template("error.html")
+            response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+            response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            return response
         functionsDB.doStoredProcedure("update_presupuesto_resultado", [resultado_final, n_presupuesto])
         home_url= request.environ['HTTP_ORIGIN']
-        return render_template("etapaFinal.html", resultado=resultado_final, resultado_mes=resultado_mes, promedio_mensual=promedio_mensual, url=home_url)
+        response = render_template("etapaFinal.html", resultado=resultado_final, resultado_mes=resultado_mes, promedio_mensual=promedio_mensual, url=home_url)
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
 
     # Se obtiene el id de la url y la posicion actual
     args=[url, pos_actual]
@@ -2055,8 +2077,12 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         writeLog('getStageInfo/Intevalos', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
 
-        return render_template("intervalos.html", funcion_sig=funcion_sig, posicion=posicion,
+        response = render_template("intervalos.html", funcion_sig=funcion_sig, posicion=posicion,
                             n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, **meta_values)
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response = response
 
     elif tipo== "Cualificada": #Opciones
         # Se verifica que la calculadora tiene opciones
@@ -2065,7 +2091,11 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         if vista_etapa_opciones_n_opciones==0:
             writeLog("FALLA 1953", "", "", "url_context", "usuario_context", "debug_context")
-            return render_template("error.html")
+            response = render_template("error.html")
+            response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+            response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            return response
 
         stage_specific_info= functionsDB.doStoredProcedure("getOpciones", args)[0]
 
@@ -2078,7 +2108,11 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
                 new_option=[]
 
         #writeLog('vista_Opciones', args, new_options, "url_context", "usuario_context", "debug_context")
-        return render_template("opciones.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, opciones=new_options)
+        response = render_template("opciones.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, opciones=new_options)
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
 
     elif tipo== "Geografica":
         stage_specific_info = functionsDB.doStoredProcedure("getStageInfo", args)[0]
@@ -2090,9 +2124,17 @@ def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=N
 
         writeLog('vista_Geografica', args, stage_specific_info, "url_context", "usuario_context", "debug_context")
         writeLog('posicion', posicion, "", "url_context", "usuario_context", "debug_context")
-        return render_template("geografica.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, direccion=direccion, zoom=zoom, latitud=latitud, longitud=longitud)
+        response = render_template("geografica.html", funcion_sig=funcion_sig, posicion=posicion, n_presupuesto=n_presupuesto, titulo=titulo, subtitulo=subtitulo, direccion=direccion, zoom=zoom, latitud=latitud, longitud=longitud)
+        response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
     
-    return render_template("etapaFinal.html",pos_actual=pos_actual)
+    response = render_template("etapaFinal.html",pos_actual=pos_actual)
+    response.headers['Access-Control-Allow-Origin'] = '*'  # Update with your allowed origins
+    response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return response
 
 def generar_presupuesto(formula, token, n_presupuesto):
     try:
