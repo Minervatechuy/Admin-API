@@ -25,8 +25,8 @@ services:
       dockerfile: ./dockerfile
     ports:
       - "5000:5000"
-    links:
-      - mariadb
+    #links:
+      #- mariadb
     restart: 'always'
     volumes:
       - ./API/Docker-Webserver/flaskServer/webserver:/flaskProject
@@ -52,10 +52,10 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: 'Phpmyadmin'
-    links:
-      - mariadb
+    #links:
+      #- mariadb
     environment:
-      PMA_HOST: mariadb
+      PMA_HOST: prod-db.cyimwtghazuk.us-east-1.rds.amazonaws.com
       PMA_PORT: 3306
     ports:
       - '800:80'
