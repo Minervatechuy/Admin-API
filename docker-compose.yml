@@ -34,20 +34,20 @@ services:
     networks:
       - custom_network
 
-  mariadb:
-    image: mariadb:10.6-focal
-    restart: 'always'
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: minervatech
-      MYSQL_USER: minervatech
-      MYSQL_PASSWORD: MinervallTech
-    volumes:
-      - "./init.sql:/docker-entrypoint-initdb.d/1.sql"
-    networks:
-      - custom_network
+  #mariadb:
+    #image: mariadb:10.6-focal
+    #restart: 'always'
+    #ports:
+      #- "3306:3306"
+    #environment:
+      #MYSQL_ROOT_PASSWORD: root
+      #MYSQL_DATABASE: minervatech
+      #MYSQL_USER: minervatech
+      #MYSQL_PASSWORD: MinervallTech
+    #volumes:
+      #- "./init.sql:/docker-entrypoint-initdb.d/1.sql"
+    #networks:
+      #- custom_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
