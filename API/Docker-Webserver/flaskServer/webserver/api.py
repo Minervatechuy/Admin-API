@@ -47,7 +47,9 @@ def stripe_webhook():
           f"Equipo MinervaTech<br/>"
           f"Para cualquier consulta, no dudes en ponerte en contacto con nuestro equipo de soporte:<br/>"
           f"Soporte técnico: soporte@minervatech.uy<br/>"
-          f"WhatsApp: +59895738995", "Licencia Simulador", email)
+          f"WhatsApp: +59895738995<br/><br/>"
+          f"Para que vaya familiarizándose con nuestro sistema le acercamos el enlace al tutoría de la herramienta: <a href='https://minervatech.uy/tutorial/'>https://minervatech.uy/tutorial/</a>, recuerde que ante cualquier duda también puede ponerse en contacto con nuestro equipo de soporte.<br/><br/>"
+          , "Licencia Simulador", email)
         except Exception as e:
             log(e)
 

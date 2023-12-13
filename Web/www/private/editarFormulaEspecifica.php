@@ -102,6 +102,8 @@ if (!(isset($_POST["calc"])))  header('Location: dashboard.php');
                                 ';
                             }
                         ?>
+                    <p><strong>Si necesitas más información sobre la formula, puedes consultar la página de ayuda:</strong></p>
+                    <a href="https://minervatech.uy/formula/" class="btn btn-primary" target="_blank">Fórmulas</a>    
                     </div>
                 </div>
 
