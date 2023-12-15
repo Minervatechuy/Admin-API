@@ -1,6 +1,6 @@
 
 from flask import Flask, jsonify, render_template, request, json
-from flask_cors import CORS, cross_origin  # Para que se permita la política CORS
+from flask_cors import CORS  # Para que se permita la política CORS
 from datetime import datetime
 import smtplib, ssl, model.functionsDB as functionsDB
 from utils import *
@@ -15,13 +15,6 @@ app.config['MAX_CONTENT_LENGTH'] = 35 * 1000 * 1000
 CORS(app)  # Aplica la política de CORS sobre esta aplicación
 
 # Definición de las funciones por caso de uso
-
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return response
 
 @app.route('/', methods=['GET']) 
 def index():
@@ -54,7 +47,9 @@ def stripe_webhook():
           f"Equipo MinervaTech<br/>"
           f"Para cualquier consulta, no dudes en ponerte en contacto con nuestro equipo de soporte:<br/>"
           f"Soporte técnico: soporte@minervatech.uy<br/>"
-          f"WhatsApp: +59895738995", "Licencia Simulador", email)
+          f"WhatsApp: +59895738995<br/><br/>"
+          f"Para que vaya familiarizándose con nuestro sistema le acercamos el enlace al tutoría de la herramienta: <a href='https://minervatech.uy/tutorial/'>https://minervatech.uy/tutorial/</a>, recuerde que ante cualquier duda también puede ponerse en contacto con nuestro equipo de soporte.<br/><br/>"
+          , "Licencia Simulador", email)
         except Exception as e:
             log(e)
 
@@ -1938,13 +1933,9 @@ def comprar_token():
 # Actualiza la formula de una determinada calculadora
 #@app.route('/prueba', methods=['POST'], endpoint='prueba')
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>/<tipo_sig>')
-@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>/<area_ant>/<lonfgitud_ant>/latitud_ant>/<direccion_ant>')
-@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/<n_presupuesto>/<tipo_ant>/<valor_ant>')
-@cross_origin()
 @app.route('/show_etapa/<posicion>/<direccion_url>/')
-@cross_origin()
 
 def show_etapa(posicion=None, direccion_url=None, n_presupuesto=None, tipo_ant=None, valor_ant=None, area_ant=None, longitud_ant=None, latitud_ant=None, direccion_ant=None, tipo_sig=None):
     #url= request.environ['HTTP_ORIGIN']

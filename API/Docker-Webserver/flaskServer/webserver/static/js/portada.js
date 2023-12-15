@@ -117,5 +117,3 @@ function logInformation(apiurl, n_presupuesto) {
             });
     });
 }
-
-
